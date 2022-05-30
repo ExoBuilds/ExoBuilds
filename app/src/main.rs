@@ -2,6 +2,7 @@
 
 use rocket_dyn_templates::Template;
 use std::collections::HashMap;
+use rocket::fs::FileServer;
 
 #[get("/")]
 fn index() -> Template {
@@ -9,21 +10,10 @@ fn index() -> Template {
     Template::render("index", &context)
 }
 
-#[get("/tkt")]
-fn tkt() -> Template {
-    let context: HashMap<String, String> = HashMap::new();
-    Template::render("index", &context)
-}
-
-#[get("/<word>")]
-fn test(word: &str) -> String {
-    format!("J'aime les {}", word)
-}
-
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/arabe", routes![test, tkt])
         .mount("/", routes![index])
+        .mount("/", FileServer::from("public/"))
         .attach(Template::fairing())
 }

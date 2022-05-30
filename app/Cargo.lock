@@ -380,6 +380,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "exobuilds"
+version = "0.1.0"
+dependencies = [
+ "rocket",
+ "rocket_dyn_templates",
+]
+
+[[package]]
 name = "fake-simd"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -633,14 +641,6 @@ name = "hashbrown"
 version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
-
-[[package]]
-name = "hello-rocket"
-version = "0.1.0"
-dependencies = [
- "rocket",
- "rocket_dyn_templates",
-]
 
 [[package]]
 name = "hermit-abi"
