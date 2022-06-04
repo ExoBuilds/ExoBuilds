@@ -2,3 +2,17 @@ body {
     background-color: #070d20;
     overflow-x: hidden;
 }
+
+.champion-icon {
+    margin: 0%;
+    padding-bottom: 1rem;
+    padding: 0%;
+    width: 100px;
+    height: 100px;
+}
+
+.champion-image {
+    width: 100px;
+    height: 100px;
+    margin: 0.3rem;
+}
