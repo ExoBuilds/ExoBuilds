@@ -34,11 +34,11 @@
           </div>
         {# Fin barre de recherche #}
         <div style="margin-top:1rem">
-          <a id="aatrox" class="champion-icon" href="http://127.0.0.1:8000//champions/aatrox"><img src="images/aatrox.webp" class="champion-image" alt="Aatrox"></a>
-          <a id="ahri" class="champion-icon" href="http://127.0.0.1:8000//champions/aatrox"><img src="images/aatrox.webp" class="champion-image" alt="Aatrox"></a>
-          <a id="akali" class="champion-icon" href="http://127.0.0.1:8000//champions/aatrox"><img src="images/aatrox.webp" class="champion-image" alt="Aatrox"></a>
-          <a id="akshan" class="champion-icon" href="http://127.0.0.1:8000//champions/aatrox"><img src="images/aatrox.webp" class="champion-image" alt="Aatrox"></a>
-          <a id="alistar" class="champion-icon" href="http://127.0.0.1:8000//champions/aatrox"><img src="images/aatrox.webp" class="champion-image" alt="Aatrox"></a>
+          <a id="aatrox" class="champion-icon" href="http://127.0.0.1:8000/champions/aatrox"><img src="images/aatrox.webp" class="champion-image" alt="Aatrox"></a>
+          <a id="ahri" class="champion-icon" href="http://127.0.0.1:8000/champions/aatrox"><img src="images/ahri.webp" class="champion-image" alt="Aatrox"></a>
+          <a id="akali" class="champion-icon" href="http://127.0.0.1:8000/champions/aatrox"><img src="images/akali.webp" class="champion-image" alt="Aatrox"></a>
+          <a id="akshan" class="champion-icon" href="http://127.0.0.1:8000/champions/aatrox"><img src="images/akshan.webp" class="champion-image" alt="Aatrox"></a>
+          <a id="alistar" class="champion-icon" href="http://127.0.0.1:8000/champions/aatrox"><img src="images/alistar.webp" class="champion-image" alt="Aatrox"></a>
         </div>
       </div>
       <div class="col-1"></div>
