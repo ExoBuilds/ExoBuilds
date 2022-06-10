@@ -1,5 +1,5 @@
 function construct_champions() {
-    fetch("./js/champion.json")
+    fetch("http://ddragon.leagueoflegends.com/cdn/12.11.1/data/en_US/champion.json")
     .then(response => {
         return response.json();
     })
