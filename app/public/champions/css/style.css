@@ -1,0 +1,23 @@
+body {
+    background-color: #070d20;
+    overflow-x: hidden;
+    cursor:default;
+    color: lightgray;
+}
+
+span {
+    transform: translate(65%,-40%);
+    border: 2px solid #17172e;
+    box-sizing: content-box;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #383864;
+    font-size: 9px;
+    font-weight: 700;
+    pointer-events: none;
+}

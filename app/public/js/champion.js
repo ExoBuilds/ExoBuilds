@@ -9,7 +9,7 @@ function construct_champions() {
             newA = document.createElement("a");
             newA.id = dat
             newA.classList = "champion-icon"
-            newA.href = "http://127.0.0.1:8000/champions/" + dat.toLowerCase()
+            newA.href = "./champions/" + dat
             newIMG = document.createElement("img");
             newIMG.alt = dat
             newIMG.classList = "champion-image"
