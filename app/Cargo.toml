@@ -7,7 +7,22 @@ edition = "2021"
 
 [dependencies]
 rocket = "0.5.0-rc.1"
+dotenv = "0.15.0"
+serde = "1.0.137"
+
+[dependencies.ureq]
+version = "2.4.0"
+features = ["json"]
+
+[dependencies.mongodb]
+version = "2.2.0"
+default-features = false
+features = ["sync"] 
 
 [dependencies.rocket_dyn_templates]
 version = "0.1.0-rc.1"
 features = ["tera"]
+
+[production]
+address = "0.0.0.0"
+port = 80

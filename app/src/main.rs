@@ -5,6 +5,18 @@ use rocket_dyn_templates::context;
 use std::collections::HashMap;
 use rocket::fs::FileServer;
 
+use std::thread;
+
+mod models;
+mod database;
+use database::*;
+
+mod settings;
+use settings::Settings;
+
+mod utils;
+use utils::initialize_matches;
+
 #[get("/")]
 fn index() -> Template {
     let context: HashMap<String, String> = HashMap::new();
@@ -15,7 +27,7 @@ fn index() -> Template {
 fn champions(name: &str) -> Template {
     Template::render("champions", context! {
         name: name,
-        title: "The darkin blade"
+        title: "The darkin blade",
         spellmax1: name.to_owned() + "Q",
         spellname1: "A",
         spellmax2: name.to_owned() + "W",
@@ -42,6 +54,9 @@ fn champions(name: &str) -> Template {
 
 #[launch]
 fn rocket() -> _ {
+    let mut settings = Settings::init();
+    let database = Database::init(&settings);
+    thread::spawn(move || {initialize_matches(&mut settings, &database)});
     rocket::build()
         .mount("/", routes![index, champions])
         .mount("/", FileServer::from("public/"))
