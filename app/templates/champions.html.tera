@@ -38,7 +38,7 @@
           <div class="col-2" style="margin-top: 4rem;margin-left:1.4rem">
             <img src="images/jungle.png" alt="Jungle">
           </div>
-          <div class="col-6" style="margin-top: 4rem;display:flex">
+          <div class="col-8" style="margin-top: 4rem;display:flex">
             <div>
               <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/spell/FlashFrost.png" alt="Spell0">
               <div>
@@ -64,6 +64,67 @@
               <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/spell/FlashFrost.png" alt="Spell0">
               <div>
                 <span>R</span>
+              </div>
+            </div>
+            <div style="margin-left: 12rem;display:flex">
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/spell/SummonerFlash.png" alt="Spell0">
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/spell/SummonerDot.png" alt="Spell0" style="margin-left: 1rem;">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1"></div>
+          <div class="col-2" style="margin-top: 4rem;margin-left: 1rem;display:flex">
+            <img src="https://ddragon.canisback.com/img/perk-images/Styles/Precision/Conqueror/Conqueror.png" height="80rem" alt="Conqueror">
+            <img src="https://ddragon.canisback.com/img/perk-images/Styles/7200_Domination.png" height="30rem" alt="Domination" style="margin:40px 0px 0px -30px;background-color: #070d20;">
+          </div>
+          <div class="col-6" style="margin-top: 4rem;display:flex">
+            <div>
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/3858.png" alt="Spell0">
+              <div>
+                <span>1</span>
+              </div>
+            </div>
+            <img src="images/arrow.svg" height="50rem" alt="Spell0" style="margin-top: 0.5rem;">
+            <div>
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/3078.png" alt="Spell0">
+              <div>
+                <span>2</span>
+              </div>
+            </div>
+            <img src="images/arrow.svg" height="50rem" alt="Spell0" style="margin-top: 0.5rem;">
+            <div>
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/3053.png" alt="Spell0">
+              <div>
+                <span>3</span>
+              </div>
+            </div>
+            <img src="images/arrow.svg" height="50rem" alt="Spell0" style="margin-top: 0.5rem;">
+            <div>
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/3053.png" alt="Spell0">
+              <div>
+                <span>4</span>
+              </div>
+            </div>
+            <img src="images/arrow.svg" height="50rem" alt="Spell0" style="margin-top: 0.5rem;">
+            <div>
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/3053.png" alt="Spell0">
+              <div>
+                <span>5</span>
+              </div>
+            </div>
+            <img src="images/arrow.svg" height="50rem" alt="Spell0" style="margin-top: 0.5rem;">
+            <div>
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/3053.png" alt="Spell0">
+              <div>
+                <span>6</span>
+              </div>
+            </div>
+            <img src="images/arrow.svg" height="50rem" alt="Spell0" style="margin-top: 0.5rem;">
+            <div>
+              <img src="http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/3053.png" alt="Spell0">
+              <div>
+                <span>7</span>
               </div>
             </div>
           </div>
