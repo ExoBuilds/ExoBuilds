@@ -18,15 +18,15 @@
   <body>
     <nav class="navbar fixed-top navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="http://127.0.0.1:8000/"><img src="images/ExoBuilds.svg" height="50px" alt="Home"></a>
+        <a class="navbar-brand" href="http://127.0.0.1:8000/"><img src="images/logo2.png" height="50px" alt="Home"></a>
       </div>
     </nav>
-    <div class="row" style="margin-top: 4rem;">
+    <div class="row" style="margin-top: 7rem;">
       <div class="col-1"></div>
       <div class="col-10">
-        <img src="images/ExoBuilds.svg" class="rounded mx-auto d-block" alt="...">
+        <img src="images/logo2.png" height="200px" class="rounded mx-auto d-block" alt="...">
         {# Barre de recherche #}
-          <div class="row" style="margin-top:5rem">
+          <div class="row" style="margin-top:2rem">
             <div class="col-3"></div>
             <div class="col">
               <input id="search-champ" class="form-control form-control-lg" type="text" placeholder="Rechercher un champion" aria-label=".form-control-lg" onkeyup="search_champ()"/>
