@@ -15,6 +15,27 @@ fn index() -> Template {
 fn champions(name: &str) -> Template {
     Template::render("champions", context! {
         name: name,
+        spellmax1: name.to_owned() + "Q",
+        spellname1: "A",
+        spellmax2: name.to_owned() + "W",
+        spellname2: "Z",
+        spellmax3: name.to_owned() + "E",
+        spellname3: "E",
+        spellmax4: name.to_owned() + "R",
+        spellname4: "R",
+        item0: "3858",
+        item1: "3078",
+        item2: "3053",
+        item3: "3053",
+        item4: "3053",
+        item5: "3053",
+        item6: "3053",
+        rune: "Conqueror",
+        rune1: "Precision",
+        rune2: "Domination",
+        summoner1: "Flash",
+        summoner2: "Dot",
+        role: "jungle"
     })
 }
 
