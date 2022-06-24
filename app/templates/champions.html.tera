@@ -30,7 +30,7 @@
             <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ name }}.png" alt="{{ name }}">
           </div>
           <div class="col-9" style="margin-top: 6rem;">
-            <h1 style="font-weight:bold">{{ name }} - The darkin blade</h1>
+            <h1 style="font-weight:bold">{{ name }} - {{ title }}</h1>
           </div>
         </div>
         <div class="row">

@@ -15,6 +15,7 @@ fn index() -> Template {
 fn champions(name: &str) -> Template {
     Template::render("champions", context! {
         name: name,
+        title: "The darkin blade"
         spellmax1: name.to_owned() + "Q",
         spellname1: "A",
         spellmax2: name.to_owned() + "W",
