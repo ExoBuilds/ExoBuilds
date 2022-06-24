@@ -21,14 +21,14 @@ impl Database {
         let db = client.database("exobuilds");
         let matches: Collection<Match> = db.collection("match");
         let data: Collection<Data> = db.collection("data");
-        Database { 
+        Database {
             matches: matches,
             data: data,
         }
     }
 
-    pub fn get_matches(&self) -> Result<HashSet<Match>, Error> {
-        let mut elements: HashSet<Match> = HashSet::new();
+    pub fn get_matches(&self) -> Result<HashSet<String>, Error> {
+        let mut elements: HashSet<String> = HashSet::new();
         let matches = self.
             matches
             .find(None, None)
@@ -38,7 +38,7 @@ impl Database {
             if target.is_err() {
                 continue;
             }
-            elements.insert(target.unwrap());
+            elements.insert(target.unwrap().match_id);
         }
         Ok(elements)
     }
@@ -56,10 +56,18 @@ impl Database {
         Ok(target)
     }
 
-    pub fn add_matches(&self, new_matches: Vec<Match>) -> Result<InsertManyResult, Error> {
+    pub fn add_matches(&self, new_matches: Vec<String>) -> Result<InsertManyResult, Error> {
+        let mut new_docs = Vec::new();
+
+        for element in new_matches {
+            new_docs.push(Match {
+                id: None,
+                match_id: element
+            });
+        }
         let target = self
             .matches
-            .insert_many(new_matches, None)
+            .insert_many(new_docs, None)
             .ok()
             .expect("Error whilst adding new matches");
         Ok(target)

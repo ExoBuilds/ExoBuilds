@@ -2,9 +2,11 @@ use std::env;
 extern crate dotenv;
 use dotenv::dotenv;
 
+use std::collections::VecDeque;
+
 pub struct Settings {
     pub mongo_uri: String,
-    pub puuid: Vec<String>,
+    pub puuid: VecDeque<String>,
     pub riot_api: String
 }
 
