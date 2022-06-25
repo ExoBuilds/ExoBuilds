@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 
 use super::champion_model::Champion;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Eq, Hash, PartialEq, Debug, Serialize, Deserialize)]
 pub struct Data {
     #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
     pub id: Option<ObjectId>,

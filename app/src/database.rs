@@ -56,13 +56,13 @@ impl Database {
         Ok(target)
     }
 
-    pub fn add_matches(&self, new_matches: Vec<String>) -> Result<InsertManyResult, Error> {
+    pub fn add_matches(&self, new_matches: Vec<&String>) -> Result<InsertManyResult, Error> {
         let mut new_docs = Vec::new();
 
         for element in new_matches {
             new_docs.push(Match {
                 id: None,
-                match_id: element
+                match_id: element.into()
             });
         }
         let target = self
