@@ -181,7 +181,7 @@ fn read_champ(map: &Map<String, Value>) -> Champion {
         8021 => "FleetFootwork".into(),
 
         8437 => "GraspOfTheUndying".into(),
-        8439 => "Aftershock".into(),
+        8439 => "VeteranAftershock".into(),
         8465 => "Guardian".into(),
 
         8214 => "SummonAery".into(),
