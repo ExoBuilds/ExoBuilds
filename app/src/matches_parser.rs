@@ -57,7 +57,7 @@ fn retrieve_matches(settings: &mut Settings, requests: &mut u32) -> HashSet<Stri
 
             matches.extend(target);
 
-            *requests -= 1_u32;
+            *requests -= 1;
             size -= 1;
         }
 
@@ -303,7 +303,7 @@ fn read_matches(settings: &Settings, mut matches: HashSet<String>, requests: &mu
 
         data.insert(target.unwrap());
 
-        *requests -= 1_u32;
+        *requests -= 1;
     }
 
     data
