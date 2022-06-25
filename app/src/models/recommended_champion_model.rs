@@ -1,7 +1,7 @@
 use mongodb::bson::oid::ObjectId;
 use serde::{Serialize, Deserialize};
 
-#[derive(Eq, Hash, PartialEq, Debug, Serialize, Deserialize)]
+#[derive(Eq, Hash, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct RecommendedChampion {
     #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
     pub id: Option<ObjectId>,

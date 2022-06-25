@@ -49,7 +49,6 @@ fn retrieve_matches(settings: &mut Settings, requests: &mut u32) -> HashSet<Stri
             settings.puuid.push_back(puuid);
 
             if target.is_err() {
-                println!("error");
                 *requests = 0;
                 continue;
             }
