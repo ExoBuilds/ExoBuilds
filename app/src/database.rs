@@ -1,5 +1,5 @@
-use crate::{settings::Settings, models::{recommended_champion_model::RecommendedChampion, data_model::Data}};
-use std::collections::HashSet;
+use crate::{settings::Settings, models::{recommended_champion_model::RecommendedChampion, data_model::Data, champion_model::Champion}};
+use std::collections::{HashSet, HashMap};
 
 use mongodb::{
     bson::extjson::de::Error,
@@ -48,6 +48,28 @@ impl Database {
         Ok(elements)
     }
 
+    // pub fn get_champions(&self) -> Result<HashMap<String, Vec<Champion>>, Error> {
+    //     let mut elements: HashMap<String, &mut Vec<Champion>> = HashMap::new();
+    //     let data = self.
+    //         data
+    //         .find(None, None)
+    //         .ok()
+    //         .expect("Error whilst retrieve every matches");
+    //     for target in data.into_iter() {
+    //         if target.is_err() {
+    //             continue;
+    //         }
+    //         for champ in target.unwrap().champions {
+    //             let set = elements.get(&champ.champion_name);
+    //             if set.is_none() {
+    //                 elements.insert(champ.champion_name.clone(), &mut vec![champ]);
+    //                 continue;
+    //             }
+    //             set.unwrap().push(champ);
+    //         }
+    //     }
+    //     Ok(elements)
+    // }
     pub fn add_data(&self, new_data: Vec<Data>) -> Result<InsertManyResult, Error> {
         let target = self
             .data

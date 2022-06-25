@@ -1,6 +1,11 @@
 use crate::database::Database;
-use crate::settings::Settings;
+use std::{thread, time};
 
 pub fn initialize_champions(db: Database) {
+    loop {
 
+        
+
+        thread::sleep(time::Duration::from_secs(300));
+    }
 }

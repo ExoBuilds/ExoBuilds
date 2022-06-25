@@ -294,13 +294,13 @@ fn read_matches(settings: &Settings, mut matches: HashSet<String>, requests: &mu
         }
 
         let element = matches.iter().next().cloned().unwrap();
-        matches.take(&element).unwrap();
 
         let target = read_match(settings, &element);
         if target.is_err() {
             *requests = 0;
             continue;
         }
+        matches.take(&element).unwrap();
 
         data.insert(target.unwrap());
 
