@@ -1,17 +1,24 @@
-use crate::settings::Settings;
+use crate::{settings::Settings, models::{recommended_champion_model::RecommendedChampion, data_model::Data}};
 use std::collections::HashSet;
 
 use mongodb::{
-    bson::{extjson::de::Error},
-    results::{InsertOneResult, InsertManyResult},
+    bson::extjson::de::Error,
+    results::InsertManyResult,
     sync::{Client, Collection},
 };
 
-use crate::models::{match_model::Match, data_model::Data};
-
 pub struct Database {
-    pub matches: Collection<Match>,
     pub data: Collection<Data>,
+    pub champion: Collection<RecommendedChampion>
+}
+
+impl Clone for Database {
+    fn clone(&self) -> Self {
+        Database {
+            data: self.data.clone_with_type(),
+            champion: self.champion.clone_with_type()
+        }
+    }
 }
 
 impl Database {
@@ -19,22 +26,20 @@ impl Database {
         let uri = settings.mongo_uri.clone();
         let client = Client::with_uri_str(uri).unwrap();
         let db = client.database("exobuilds");
-        let matches: Collection<Match> = db.collection("match");
-        let data: Collection<Data> = db.collection("data");
         Database {
-            matches: matches,
-            data: data,
+            data: db.collection("data"),
+            champion: db.collection("champions")
         }
     }
 
     pub fn get_matches(&self) -> Result<HashSet<String>, Error> {
         let mut elements: HashSet<String> = HashSet::new();
-        let matches = self.
-            matches
+        let data = self.
+            data
             .find(None, None)
             .ok()
             .expect("Error whilst retrieve every matches");
-        for target in matches.into_iter() {
+        for target in data.into_iter() {
             if target.is_err() {
                 continue;
             }
@@ -43,55 +48,10 @@ impl Database {
         Ok(elements)
     }
 
-    pub fn create_match(&self, new_match: Match) -> Result<InsertOneResult, Error> {
-        let new_doc = Match {
-            id: None,
-            match_id: new_match.match_id,
-        };
-        let target = self
-            .matches
-            .insert_one(new_doc, None)
-            .ok()
-            .expect("Error whilst adding new match");
-        Ok(target)
-    }
-
-    pub fn add_matches(&self, new_matches: Vec<&String>) -> Result<InsertManyResult, Error> {
-        let mut new_docs = Vec::new();
-
-        for element in new_matches {
-            new_docs.push(Match {
-                id: None,
-                match_id: element.into()
-            });
-        }
-        let target = self
-            .matches
-            .insert_many(new_docs, None)
-            .ok()
-            .expect("Error whilst adding new matches");
-        Ok(target)
-    }
-
     pub fn add_data(&self, new_data: Vec<Data>) -> Result<InsertManyResult, Error> {
         let target = self
             .data
             .insert_many(new_data, None)
-            .ok()
-            .expect("Error whilst adding new data");
-        Ok(target)
-    }
-
-    pub fn init_match_data(&self, target: Match) -> Result<InsertOneResult, Error> {
-        let champions = Vec::new();
-        let new_doc = Data {
-            id: None,
-            match_id: target.match_id,
-            champions: champions,
-        };
-        let target = self
-            .data
-            .insert_one(new_doc, None)
             .ok()
             .expect("Error whilst adding new data");
         Ok(target)

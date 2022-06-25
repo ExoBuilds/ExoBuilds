@@ -14,8 +14,11 @@ use database::*;
 mod settings;
 use settings::Settings;
 
-mod utils;
-use utils::initialize_matches;
+mod matches_parser;
+use matches_parser::initialize_matches;
+
+mod champion_parser;
+use champion_parser::initialize_champions;
 
 #[get("/")]
 fn index() -> Template {
@@ -43,8 +46,8 @@ fn champions(name: &str) -> Template {
         item4: "3053",
         item5: "3053",
         item6: "3053",
-        rune: "Conqueror",
-        rune1: "Precision",
+        rune: "Electrocute",
+        rune1: "Domination",
         rune2: "Domination",
         summoner1: "Flash",
         summoner2: "Dot",
@@ -56,7 +59,9 @@ fn champions(name: &str) -> Template {
 fn rocket() -> _ {
     let mut settings = Settings::init();
     let database = Database::init(&settings);
-    thread::spawn(move || {initialize_matches(&mut settings, &database)});
+    let second_database = database.clone();
+    thread::spawn(move || {initialize_matches(&mut settings, second_database)});
+    thread::spawn(move || {initialize_champions(database)});
     rocket::build()
         .mount("/", routes![index, champions])
         .mount("/", FileServer::from("public/"))

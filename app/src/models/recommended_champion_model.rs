@@ -1,9 +1,14 @@
+use mongodb::bson::oid::ObjectId;
 use serde::{Serialize, Deserialize};
 
 #[derive(Eq, Hash, PartialEq, Debug, Serialize, Deserialize)]
-pub struct Champion {
-    pub win: bool,
-    pub champion_name: String,
+pub struct RecommendedChampion {
+    #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
+    pub id: Option<ObjectId>,
+    pub wins: i64,
+    pub loses: i64,
+    pub name: String,
+    pub title: String,
     pub item0: i64,
     pub item1: i64,
     pub item2: i64,
