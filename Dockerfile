@@ -1,6 +1,6 @@
 # Leveraging the pre-built Docker images with 
 # cargo-chef and the Rust toolchain
-FROM lukemathwalker/cargo-chef:latest-rust-1.59.0 AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.59.0-slim-buster AS chef
 WORKDIR app
 
 FROM chef AS planner
@@ -15,7 +15,7 @@ RUN cargo chef cook --release --recipe-path recipe.json
 COPY app/ .
 RUN cargo build --release --bin exobuilds-website
 
-FROM ubuntu:22.04 as runner
+FROM debian:buster-slim as runner
 RUN apt-get -qy update && apt-get -qy upgrade
 COPY --from=builder /app/target/release/exobuilds-website /usr/local/bin/exobuilds-website
 COPY --from=builder /app/public /public

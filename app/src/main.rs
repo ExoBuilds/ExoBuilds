@@ -161,6 +161,11 @@ fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Temp
     }
 }
 
+#[post("/profile/<name>")]
+fn submit<'r>(db: &State<Database>, settings: &State<Settings>, name: &str) -> Template {
+    profile(db, settings, name)
+}
+
 #[launch]
 fn rocket() -> _ {
     let settings = Settings::init();
@@ -175,7 +180,7 @@ fn rocket() -> _ {
         move || initialize_champions(database)
     });
     rocket::build()
-        .mount("/", routes![index, champions, profile])
+        .mount("/", routes![index, champions, profile, submit])
         .mount("/", FileServer::from("public/"))
         .manage(database)
         .manage(settings)
