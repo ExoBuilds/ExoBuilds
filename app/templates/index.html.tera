@@ -26,12 +26,15 @@
       <div class="col-10">
         <img src="images/logo2.png" height="200px" class="rounded mx-auto d-block" alt="...">
         {# Barre de recherche #}
-          <div class="row" style="margin-top:2rem">
-            <div class="col-3"></div>
-            <div class="col">
-              <input id="search-champ" class="form-control form-control-lg" type="text" placeholder="Rechercher un champion" aria-label=".form-control-lg" onkeyup="search_champ()"/>
+          <div class="row" style="margin-top:5rem">
+            <div class="col-2"></div>
+            <div class="col-6">
+              <input id="search-champ" class="form-control form-control-lg" type="text" placeholder="Rechercher un champion ou profile" aria-label=".form-control-lg" onkeyup="search_champ()"/>
             </div>
-            <div class="col-3"></div>
+            <div class="col-2">
+              <a id="searchplayer" type="button" href="#" class="btn btn-primary btn-lg">Rechercher Profile</a>
+            </div>
+            <div class="col-2"></div>
           </div>
         {# Fin barre de recherche #}
         <div style="margin-top:1rem" id="champ-list"></div>
