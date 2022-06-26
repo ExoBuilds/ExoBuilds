@@ -3,7 +3,7 @@ use std::collections::{HashSet, HashMap};
 
 use mongodb::{
     bson::{extjson::de::Error, doc},
-    results::{InsertManyResult, UpdateResult},
+    results::{UpdateResult, InsertOneResult},
     sync::{Client, Collection}, options::ReplaceOptions,
 };
 
@@ -101,10 +101,10 @@ impl Database {
         Ok(result)
     }
 
-    pub fn add_data(&self, new_data: Vec<Data>) -> Result<InsertManyResult, Error> {
+    pub fn add_data(&self, new_data: Data) -> Result<InsertOneResult, Error> {
         let target = self
             .data
-            .insert_many(new_data, None)
+            .insert_one(new_data, None)
             .ok()
             .expect("Error whilst adding new data");
         Ok(target)

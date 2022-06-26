@@ -21,4 +21,6 @@ pub struct Champion {
     pub spellmax2: String,
     pub spellmax3: String,
     pub spellmax4: String,
+    pub puuid: String,
+    pub profile_icon: i64,
 }

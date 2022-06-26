@@ -100,6 +100,29 @@ fn champions(db: &State<Database>, name: &str) -> Template {
     })
 }
 
+#[get("/profile/<name>")]
+fn profile(name: &str) -> Template {
+    Template::render("profile", context! {
+        name: name,
+        icon: "4603",
+        champion1: "Zyra",
+        champion1game: "10",
+        champion1rate: "50",
+        champion2: "Jhin",
+        champion2game: "7",
+        champion3: "Xerath",
+        champion3game: "3",
+        game1kill: "13",
+        game1death: "13",
+        game1assist: "13",
+        game1time: "13",
+        game1cs: "13",
+        game1state: "win",
+        game1champion: "Zilean"
+
+    })
+}
+
 #[launch]
 fn rocket() -> _ {
     let mut settings = Settings::init();
@@ -109,7 +132,7 @@ fn rocket() -> _ {
     thread::spawn(move || {initialize_matches(&mut settings, tmp_db1)});
     thread::spawn(move || {initialize_champions(tmp_db2)});
     rocket::build()
-        .mount("/", routes![index, champions])
+        .mount("/", routes![index, champions, profile])
         .mount("/", FileServer::from("public/"))
         .manage(database)
         .attach(Template::fairing())

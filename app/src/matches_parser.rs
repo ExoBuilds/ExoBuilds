@@ -229,6 +229,8 @@ fn read_champ(map: &Map<String, Value>) -> Champion {
         spellmax2,
         spellmax3,
         spellmax4,
+        puuid: map.get("puuid").unwrap().as_str().unwrap().into(),
+        profile_icon: map.get("profileIcon").unwrap().as_i64().unwrap().into()
 
     }
 
@@ -238,8 +240,10 @@ fn read_match(settings: &Settings, target: &String) -> Result<Data, ureq::Error>
 
     let mut data = Data {
         id: None,
+        match_duration: 0,
         match_id: target.into(),
-        champions: Vec::new()
+        champions: Vec::new(),
+        match_creation: 0,
     };
 
     let request = format!("https://europe.api.riotgames.com/lol/match/v5/matches/{id}",
@@ -257,6 +261,9 @@ fn read_match(settings: &Settings, target: &String) -> Result<Data, ureq::Error>
 
             if element.is_some() && element.unwrap().as_object().is_some() {
                 let element = element.unwrap().as_object().unwrap();
+
+                data.match_duration = element.get("gameDuration").unwrap().as_i64().unwrap();
+                data.match_creation = element.get("gameCreation").unwrap().as_i64().unwrap();
 
                 let element = element.get("participants");
 
@@ -277,15 +284,12 @@ fn read_match(settings: &Settings, target: &String) -> Result<Data, ureq::Error>
     })
 }
 
-fn read_matches(settings: &Settings, mut matches: HashSet<String>, requests: &mut u32, clock: &mut Instant) -> HashSet<Data> {
-    let mut data: HashSet<Data> = HashSet::new();
-
+fn read_matches(db: &Database, settings: &Settings, mut matches: HashSet<String>, requests: &mut u32, clock: &mut Instant) {
     while matches.len() > 0 {
 
         if clock.elapsed().as_secs() > 120 {
             *clock = Instant::now();
             *requests = 80;
-            println!("refresh");
         }
 
         if *requests == 0 {
@@ -301,16 +305,11 @@ fn read_matches(settings: &Settings, mut matches: HashSet<String>, requests: &mu
         }
         matches.take(&element).unwrap();
 
-        data.insert(target.unwrap());
+        let _ = db.add_data(target.unwrap());
 
         *requests -= 1;
     }
 
-    data
-}
-
-fn publish_data(db: &Database, data: HashSet<Data>) {
-    let _ = db.add_data(data.into_iter().collect());
 }
 
 pub fn initialize_matches(settings: &mut Settings, db: Database) {
@@ -336,7 +335,6 @@ pub fn initialize_matches(settings: &mut Settings, db: Database) {
             continue;
         }
 
-        let data = read_matches(settings, matches, &mut requests, &mut clock);
-        publish_data(&db, data);
+        read_matches(&db, settings, matches, &mut requests, &mut clock);
     }
 }
