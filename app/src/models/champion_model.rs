@@ -1,8 +1,11 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-#[derive(Eq, Hash, PartialEq, Debug, Serialize, Deserialize)]
+#[derive(Eq, Hash, PartialEq, Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Champion {
     pub win: bool,
+    pub kills: i64,
+    pub deaths: i64,
+    pub assists: i64,
     pub champion_name: String,
     pub item0: i64,
     pub item1: i64,
@@ -11,6 +14,7 @@ pub struct Champion {
     pub item4: i64,
     pub item5: i64,
     pub item6: i64,
+    pub minions_killed: i64,
     pub role: String,
     pub rune: String,
     pub rune1: String,

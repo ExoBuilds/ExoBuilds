@@ -1,22 +1,29 @@
-use crate::{settings::Settings, models::{recommended_champion_model::{RecommendedChampion}, data_model::Data, champion_model::Champion}};
-use std::collections::{HashSet, HashMap};
+use crate::{
+    models::{
+        champion_model::Champion, data_model::Data, match_history_model::MatchHistory,
+        recommended_champion_model::RecommendedChampion,
+    },
+    settings::Settings,
+};
+use std::collections::{HashMap, HashSet};
 
 use mongodb::{
-    bson::{extjson::de::Error, doc},
-    results::{UpdateResult, InsertOneResult},
-    sync::{Client, Collection}, options::ReplaceOptions,
+    bson::{doc, extjson::de::Error},
+    options::ReplaceOptions,
+    results::{InsertOneResult, UpdateResult},
+    sync::{Client, Collection},
 };
 
 pub struct Database {
     pub data: Collection<Data>,
-    pub champion: Collection<RecommendedChampion>
+    pub champion: Collection<RecommendedChampion>,
 }
 
 impl Clone for Database {
     fn clone(&self) -> Self {
         Database {
             data: self.data.clone_with_type(),
-            champion: self.champion.clone_with_type()
+            champion: self.champion.clone_with_type(),
         }
     }
 }
@@ -28,14 +35,14 @@ impl Database {
         let db = client.database("exobuilds");
         Database {
             data: db.collection("data"),
-            champion: db.collection("champions")
+            champion: db.collection("champions"),
         }
     }
 
     pub fn get_matches(&self) -> Result<HashSet<String>, Error> {
         let mut elements: HashSet<String> = HashSet::new();
-        let data = self.
-            data
+        let data = self
+            .data
             .find(None, None)
             .ok()
             .expect("Error whilst retrieve every matches");
@@ -50,8 +57,8 @@ impl Database {
 
     pub fn get_champions(&self) -> Result<HashMap<String, Vec<Champion>>, Error> {
         let mut elements: HashMap<String, Vec<Champion>> = HashMap::new();
-        let data = self.
-            data
+        let data = self
+            .data
             .find(None, None)
             .ok()
             .expect("Error whilst retrieve every matches");
@@ -60,30 +67,36 @@ impl Database {
                 continue;
             }
             for champ in target.unwrap().champions {
-                elements.entry(champ.champion_name.clone())
-                .or_insert_with(Vec::new)
-                .push(champ);
+                elements
+                    .entry(champ.champion_name.clone())
+                    .or_insert_with(Vec::new)
+                    .push(champ);
             }
         }
         Ok(elements)
     }
 
-    pub fn update_recommended_champion(&self, value: RecommendedChampion) -> Result<UpdateResult, Error> {
-        
+    pub fn update_recommended_champion(
+        &self,
+        value: RecommendedChampion,
+    ) -> Result<UpdateResult, Error> {
         let target = self
             .champion
-            .replace_one(doc! {"role": value.role.clone(), "name": value.name.clone()}, value, ReplaceOptions::builder().upsert(true).build())
+            .replace_one(
+                doc! {"role": value.role.clone(), "name": value.name.clone()},
+                value,
+                ReplaceOptions::builder().upsert(true).build(),
+            )
             .ok()
             .expect("Error whilst adding new data");
         Ok(target)
-
     }
 
     pub fn get_recommended_champion(&self, name: &str) -> Result<RecommendedChampion, Error> {
         let mut result = RecommendedChampion::default();
         let mut samples: i64 = -1;
-        let data = self.
-            champion
+        let data = self
+            .champion
             .find(doc! {"name": name}, None)
             .ok()
             .expect("Error whilst retrieve every matches");
@@ -110,10 +123,10 @@ impl Database {
         Ok(target)
     }
 
-    pub fn get_player_matches(&self, puuid: &str) -> Result<Vec<Data>, Error> {
-        let mut result: Vec<Data> = Vec::new();
-        let data = self.
-            data
+    pub fn get_player_matches(&self, puuid: &str) -> Result<Vec<MatchHistory>, Error> {
+        let mut result: Vec<MatchHistory> = Vec::new();
+        let data = self
+            .data
             .find(doc! {"champions.puuid": puuid}, None)
             .ok()
             .expect("Error whilst retrieve player matches");
@@ -121,10 +134,20 @@ impl Database {
             if target.is_err() {
                 continue;
             }
-            result.push(target.unwrap());
+            let tmp_data = target.unwrap();
+            let mut player_champion: Champion = Champion::default();
+            for champ in &tmp_data.champions {
+                if champ.puuid == puuid {
+                    player_champion = champ.clone();
+                }
+            }
+            result.push(MatchHistory {
+                player_champion: player_champion,
+                data: tmp_data,
+            });
         }
-        result.sort_by(|a, b| a.match_creation.cmp(&b.match_creation));
+        result.sort_by(|a, b| a.data.match_creation.cmp(&b.data.match_creation));
+        result.reverse();
         Ok(result)
     }
-
 }

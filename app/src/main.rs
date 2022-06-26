@@ -1,10 +1,12 @@
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
 
-use rocket::State;
-use rocket_dyn_templates::Template;
-use rocket_dyn_templates::context;
-use std::collections::HashMap;
+use models::match_history_model::MatchHistory;
 use rocket::fs::FileServer;
+use rocket::State;
+use rocket_dyn_templates::context;
+use rocket_dyn_templates::Template;
+use std::collections::HashMap;
 
 use std::thread;
 
@@ -12,7 +14,6 @@ mod utils;
 use utils::*;
 
 mod models;
-use models::data_model::Data;
 
 mod database;
 use database::*;
@@ -41,13 +42,13 @@ fn champions(db: &State<Database>, name: &str) -> Template {
     let mut spellname2 = "Z".into();
     let mut spellname3 = "E".into();
     let mut spellname4 = "R".into();
-    let mut item0 = "3858".into();
-    let mut item1 = "3078".into();
-    let mut item2 = "3053".into();
-    let mut item3 = "3053".into();
-    let mut item4 = "3053".into();
-    let mut item5 = "3053".into();
-    let mut item6 = "3053".into();
+    let mut item0 = "7050".into();
+    let mut item1 = "7050".into();
+    let mut item2 = "7050".into();
+    let mut item3 = "7050".into();
+    let mut item4 = "7050".into();
+    let mut item5 = "7050".into();
+    let mut item6 = "7050".into();
     let mut rune = "Electrocute".into();
     let mut rune1 = "Domination".into();
     let mut rune2 = "Domination".into();
@@ -63,13 +64,27 @@ fn champions(db: &State<Database>, name: &str) -> Template {
         spellname2 = champion.spellmax2;
         spellname3 = champion.spellmax3;
         spellname4 = champion.spellmax4;
-        item0 = champion.item0.to_string();
-        item1 = champion.item1.to_string();
-        item2 = champion.item2.to_string();
-        item3 = champion.item3.to_string();
-        item4 = champion.item4.to_string();
-        item5 = champion.item5.to_string();
-        item6 = champion.item6.to_string();
+        if champion.item0 != 0 {
+            item0 = champion.item0.to_string();
+        }
+        if champion.item1 != 0 {
+            item1 = champion.item1.to_string();
+        }
+        if champion.item2 != 0 {
+            item2 = champion.item2.to_string();
+        }
+        if champion.item3 != 0 {
+            item3 = champion.item3.to_string();
+        }
+        if champion.item4 != 0 {
+            item4 = champion.item4.to_string();
+        }
+        if champion.item5 != 0 {
+            item5 = champion.item5.to_string();
+        }
+        if champion.item6 != 0 {
+            item6 = champion.item6.to_string();
+        }
         rune = champion.rune;
         rune1 = champion.rune1;
         rune2 = champion.rune2;
@@ -78,57 +93,62 @@ fn champions(db: &State<Database>, name: &str) -> Template {
         role = champion.role;
     }
 
-    Template::render("champions", context! {
-        name,
-        title,
-        spellmax1: name.to_owned() + &spellname1,
-        spellname1,
-        spellmax2: name.to_owned() + &spellname2,
-        spellname2,
-        spellmax3: name.to_owned() + &spellname3,
-        spellname3,
-        spellmax4: name.to_owned() + &spellname4,
-        spellname4,
-        item0,
-        item1,
-        item2,
-        item3,
-        item4,
-        item5,
-        item6,
-        rune,
-        rune1,
-        rune2,
-        summoner1,
-        summoner2,
-        role
-    })
+    Template::render(
+        "champions",
+        context! {
+            name,
+            title,
+            spellmax1: name.to_owned() + &spellname1,
+            spellname1,
+            spellmax2: name.to_owned() + &spellname2,
+            spellname2,
+            spellmax3: name.to_owned() + &spellname3,
+            spellname3,
+            spellmax4: name.to_owned() + &spellname4,
+            spellname4,
+            item0,
+            item1,
+            item2,
+            item3,
+            item4,
+            item5,
+            item6,
+            rune,
+            rune1,
+            rune2,
+            summoner1,
+            summoner2,
+            role
+        },
+    )
 }
 
 #[get("/profile/<name>")]
 fn profile(db: &State<Database>, name: &str) -> Template {
-
     let puuid = "Y22N0dvmtG6NsF5GTpPJ4yhxI2t3zMvP5solMwWSqj1Ld-YAijBqMG5bDP9xYZ9EgVkyxiyifsMC_Q";
 
     let player_matches = db.get_player_matches(puuid.clone());
 
     let mut icon: String = "4603".into();
 
-    let mut arrays: Vec<Data> = Vec::new();
+    let mut arrays: Vec<MatchHistory> = Vec::new();
     let mut champs: Vec<(String, String, String)> = vec![("Zyra".into(), "10".into(), "50".into())];
 
     if player_matches.is_ok() {
         arrays = player_matches.unwrap();
-        champs = get_most_played_champs(puuid.clone().into(), &arrays);
-        icon = get_latest_icon(puuid.clone().into(), &arrays);
+        champs = get_most_played_champs(&arrays);
+        icon = get_latest_icon(&arrays);
     }
 
-    Template::render("profile", context! {
-        name,
-        arrays,
-        icon,
-        champs,
-    })
+    Template::render(
+        "profile",
+        context! {
+            name,
+            arrays,
+            icon,
+            champs,
+        },
+    )
 }
 
 #[launch]
@@ -137,8 +157,8 @@ fn rocket() -> _ {
     let database = Database::init(&settings);
     let tmp_db1 = database.clone();
     let tmp_db2 = database.clone();
-    thread::spawn(move || {initialize_matches(&mut settings, tmp_db1)});
-    thread::spawn(move || {initialize_champions(tmp_db2)});
+    thread::spawn(move || initialize_matches(&mut settings, tmp_db1));
+    thread::spawn(move || initialize_champions(tmp_db2));
     rocket::build()
         .mount("/", routes![index, champions, profile])
         .mount("/", FileServer::from("public/"))
