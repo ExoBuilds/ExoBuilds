@@ -16,7 +16,7 @@ COPY app/ .
 RUN cargo build --release --bin exobuilds-website
 
 FROM ubuntu:22.04 as runner
-RUN apt-get -qy update && apt-get upgrade
+RUN apt-get -qy update && apt-get -qy upgrade
 COPY --from=builder /app/target/release/exobuilds-website /usr/local/bin/exobuilds-website
 COPY --from=builder /app/public /public
 COPY --from=builder /app/templates /templates
