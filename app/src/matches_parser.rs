@@ -324,21 +324,15 @@ fn read_matches(
 pub fn update_latest_matches(settings: &Settings, db: &Database, puuid: &String) {
     let matches = retrieve_match(settings, puuid, 0, 5);
 
-    println!("no error");
-
     if matches.is_err() {
         return;
     }
-
-    println!("no first error");
 
     let matches2 = retrieve_match(settings, puuid, 1, 5);
 
     if matches2.is_err() {
         return;
     }
-
-    println!("no second error");
 
     let mut matches = matches.unwrap();
 
