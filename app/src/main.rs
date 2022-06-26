@@ -176,7 +176,7 @@ struct PlayerUpdate<'v> {
 #[post("/update_profile", data = "<form>")]
 fn submit<'r>(db: &State<Database>, settings: &State<Settings>, form: Form<PlayerUpdate<'_>>) -> Redirect {
     update_latest_matches(settings, db, &form.puuid.to_string());
-    Redirect::to("/profile/".to_owned() + form.summoner_name)
+    Redirect::to(format!("/profile/{}", urlencoding::encode(form.summoner_name)))
 }
 
 #[launch]
