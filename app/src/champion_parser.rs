@@ -1,7 +1,7 @@
 use crate::{
     database::Database,
     models::{champion_model::Champion, recommended_champion_model::RecommendedChampion},
-    utils::get_champ_title,
+    utils::{get_champ_spells, get_champ_title},
 };
 use std::collections::HashMap;
 use std::{thread, time};
@@ -68,6 +68,10 @@ fn read_matches(
     let mut spellmax2: HashMap<String, i64> = HashMap::new();
     let mut spellmax3: HashMap<String, i64> = HashMap::new();
     let mut spellmax4: HashMap<String, i64> = HashMap::new();
+    let mut spellpath1: String = "ZoeQ".to_string();
+    let mut spellpath2: String = "ZoeE".to_string();
+    let mut spellpath3: String = "ZoeW".to_string();
+    let mut spellpath4: String = "ZoeR".to_string();
 
     for element in matches {
         if element.role != role {
@@ -151,6 +155,29 @@ fn read_matches(
         title = tmp_title.unwrap();
     }
 
+    let spellmax1 = get_highest_str(spellmax1);
+    let spellmax2 = get_highest_str(spellmax2);
+    let spellmax3 = get_highest_str(spellmax3);
+    let spellmax4 = get_highest_str(spellmax4);
+
+    let spell_icons = get_champ_spells(&champion_name);
+
+    if spell_icons.is_ok() {
+        let spell_icons = spell_icons.unwrap();
+        if spell_icons.contains_key(&spellmax1) {
+            spellpath1 = spell_icons.get(&spellmax1).unwrap().to_string();
+        }
+        if spell_icons.contains_key(&spellmax2) {
+            spellpath2 = spell_icons.get(&spellmax2).unwrap().to_string();
+        }
+        if spell_icons.contains_key(&spellmax3) {
+            spellpath3 = spell_icons.get(&spellmax3).unwrap().to_string();
+        }
+        if spell_icons.contains_key(&spellmax4) {
+            spellpath4 = spell_icons.get(&spellmax4).unwrap().to_string();
+        }
+    }
+
     RecommendedChampion {
         id: None,
         wins,
@@ -170,10 +197,14 @@ fn read_matches(
         rune2: get_highest_str(rune2),
         summoner1: get_highest_str(summoner1),
         summoner2: get_highest_str(summoner2),
-        spellmax1: get_highest_str(spellmax1),
-        spellmax2: get_highest_str(spellmax2),
-        spellmax3: get_highest_str(spellmax3),
-        spellmax4: get_highest_str(spellmax4),
+        spellmax1,
+        spellmax2,
+        spellmax3,
+        spellmax4,
+        spellpath1,
+        spellpath2,
+        spellpath3,
+        spellpath4,
     }
 }
 

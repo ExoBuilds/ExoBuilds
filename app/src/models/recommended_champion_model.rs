@@ -1,5 +1,5 @@
 use mongodb::bson::oid::ObjectId;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Eq, Hash, PartialEq, Debug, Serialize, Deserialize, Default)]
 pub struct RecommendedChampion {
@@ -26,4 +26,8 @@ pub struct RecommendedChampion {
     pub spellmax2: String,
     pub spellmax3: String,
     pub spellmax4: String,
+    pub spellpath1: String,
+    pub spellpath2: String,
+    pub spellpath3: String,
+    pub spellpath4: String,
 }

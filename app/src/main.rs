@@ -37,10 +37,14 @@ fn champions(db: &State<Database>, name: &str) -> Template {
     let champion = db.get_recommended_champion(name);
 
     let mut title = "The darkin blade".into();
-    let mut spellname1 = "A".into();
-    let mut spellname2 = "Z".into();
+    let mut spellname1 = "Q".into();
+    let mut spellname2 = "W".into();
     let mut spellname3 = "E".into();
     let mut spellname4 = "R".into();
+    let mut spellmax1 = "ZoeQ".into();
+    let mut spellmax2 = "ZoeW".into();
+    let mut spellmax3 = "ZoeE".into();
+    let mut spellmax4 = "ZoeR".into();
     let mut item0 = "7050".into();
     let mut item1 = "7050".into();
     let mut item2 = "7050".into();
@@ -54,6 +58,7 @@ fn champions(db: &State<Database>, name: &str) -> Template {
     let mut summoner1 = "Flash".into();
     let mut summoner2 = "Dot".into();
     let mut role = "JUNGLE".into();
+    let mut winrate = 50;
 
     if champion.is_ok() {
         let champion = champion.unwrap();
@@ -90,6 +95,11 @@ fn champions(db: &State<Database>, name: &str) -> Template {
         summoner1 = champion.summoner1;
         summoner2 = champion.summoner2;
         role = champion.role;
+        winrate = ((champion.wins as f32 / (champion.wins + champion.loses) as f32) * 100.0) as i32;
+        spellmax1 = champion.spellpath1;
+        spellmax2 = champion.spellpath2;
+        spellmax3 = champion.spellpath3;
+        spellmax4 = champion.spellpath4;
     }
 
     Template::render(
@@ -97,13 +107,13 @@ fn champions(db: &State<Database>, name: &str) -> Template {
         context! {
             name,
             title,
-            spellmax1: name.to_owned() + &spellname1,
+            spellmax1,
             spellname1,
-            spellmax2: name.to_owned() + &spellname2,
+            spellmax2,
             spellname2,
-            spellmax3: name.to_owned() + &spellname3,
+            spellmax3,
             spellname3,
-            spellmax4: name.to_owned() + &spellname4,
+            spellmax4,
             spellname4,
             item0,
             item1,
@@ -117,7 +127,8 @@ fn champions(db: &State<Database>, name: &str) -> Template {
             rune2,
             summoner1,
             summoner2,
-            role
+            role,
+            winrate
         },
     )
 }

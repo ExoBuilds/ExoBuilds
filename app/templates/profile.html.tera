@@ -49,24 +49,26 @@
                 <div class="col-1"></div>
                 <div class="col-9" style="margin-top:2rem">
                     <div class="accordion">
-                        <div class="accordion-item">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ array.data.match_id }}" aria-expanded="false" aria-controls="collapse{{ array.data.match_id }}">
-                                {% if array.player_champion.win == true %}
-                                <span style="margin-left: 3rem;font-weight:bold;color:green">W</span>
+                            {% if array.player_champion.win == true %}                            
+                                <div class="accordion-item" style="background-color:green">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ array.data.match_id }}" aria-expanded="false" aria-controls="collapse{{ array.data.match_id }}" style="background-color:#212529">
+                                        <span style="margin-left: 3rem;font-weight:bold;color:green">W</span>
                                 {% else %}
-                                <span style="margin-left: 3rem;font-weight:bold;color:red">L</span>
+                                    <div class="accordion-item" style="background-color:red">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ array.data.match_id }}" aria-expanded="false" aria-controls="collapse{{ array.data.match_id }}" style="background-color:#212529">
+                                        <span style="margin-left: 3rem;font-weight:bold;color:red">L</span>
                                 {% endif %}
                                 <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ array.player_champion.champion_name }}.png" width="5%" alt="{{ array.player_champion.champion_name }}" style="margin-left: 3rem;">
-                                <span style="margin-left: 3rem;font-weight:bold">{{ array.player_champion.kills }}/{{ array.player_champion.deaths }}/{{ array.player_champion.assists }}</span>
-                                <span style="margin-left: 3rem;font-weight:bold">{{ array.player_champion.minions_killed }} cs</span>
-                                <span style="margin-left: 3rem;font-weight:bold;text-align:end">{{ ((array.data.match_duration / 60)) }} mins</span>
+                                <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.kills }}/{{ array.player_champion.deaths }}/{{ array.player_champion.assists }}</span>
+                                <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.minions_killed }} cs</span>
+                                <span style="margin-left: 3rem;font-weight:bold;text-align:end;color:white">{{ ((array.data.match_duration / 60)) }} mins</span>
                             </button>
                             </h2>
                             <div id="collapse{{ array.data.match_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ array.data.match_id }}" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
+                                <div class="accordion-body" style="background-color: #0d101e">
                                     <div class="row">
                                         {% for j in [1,2] %}
-                                        <div class="col-6" style="color: black;">
+                                        <div class="col-6" style="color: white;">
                                             {% for a in [1,2,3,4,5] %}
                                             {% set n = (j * a) - 1 %}
                                             {% set champ = array.data.champions[n] %}
