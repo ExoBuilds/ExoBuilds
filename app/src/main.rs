@@ -129,10 +129,10 @@ fn profile(db: &State<Database>, name: &str) -> Template {
 
     let player_matches = db.get_player_matches(puuid.clone());
 
-    let mut icon: String = "4603".into();
+    let mut icon: String = "3879".into();
 
     let mut arrays: Vec<MatchHistory> = Vec::new();
-    let mut champs: Vec<(String, String, String)> = vec![("Zyra".into(), "10".into(), "50".into())];
+    let mut champs: Vec<(String, String, String)> = Vec::new();
 
     if player_matches.is_ok() {
         arrays = player_matches.unwrap();
