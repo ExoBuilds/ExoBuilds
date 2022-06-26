@@ -3,3 +3,5 @@ target/
 .crates.toml
 .crates2.json
 .env
+certs.pem
+key.pem

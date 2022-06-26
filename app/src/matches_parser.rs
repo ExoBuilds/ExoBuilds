@@ -307,7 +307,6 @@ fn read_matches(
 
         let target = read_match(settings, &element);
         if target.is_err() {
-            thread::sleep(time::Duration::from_secs(120));
             continue;
         }
         matches.take(&element).unwrap();
@@ -317,22 +316,22 @@ fn read_matches(
 }
 
 pub fn update_latest_matches(settings: &Settings, db: &Database, puuid: &String) {
-        let matches = retrieve_match(settings, puuid, 20);
+    let matches = retrieve_match(settings, puuid, 5);
 
-        if matches.is_err() {
-            return;
-        }
-
-        let mut matches = matches.unwrap();
-
-        if matches.is_empty() {
-            return;
-        }
-        filter_matches(&db, &mut matches);
-        if matches.is_empty() {
-            return;
-        }
-
-        read_matches(db, settings, matches);
-
+    if matches.is_err() {
+        return;
     }
+
+    let mut matches = matches.unwrap();
+
+    if matches.is_empty() {
+        return;
+    }
+    filter_matches(&db, &mut matches);
+    if matches.is_empty() {
+        return;
+    }
+
+    read_matches(db, settings, matches);
+
+}
