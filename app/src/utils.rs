@@ -111,3 +111,34 @@ pub fn get_player_profile(
 
     Ok(profile)
 }
+
+pub fn get_champ_title(champ: &String) -> Result<String, ureq::Error> {
+    let mut title: String = "Default title".into();
+
+    let request =
+        format!("http://ddragon.leagueoflegends.com/cdn/12.12.1/data/en_US/champion.json");
+
+    let response: serde_json::Value = ureq::get(&request).call()?.into_json()?;
+
+    if response.as_object().is_some() {
+        let map = response.as_object().unwrap();
+
+        if map.contains_key("data") {
+            let data = map.get("data").unwrap();
+
+            if data.is_object() {
+                let data = data.as_object().unwrap();
+                if data.contains_key(champ) {
+                    let data = data.get(champ).unwrap();
+                    if data.is_object() && data.as_object().unwrap().contains_key("title") {
+                        let data = data.as_object().unwrap().get("title").unwrap();
+                        if data.is_string() {
+                            title = data.as_str().unwrap().to_string();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Ok(title)
+}

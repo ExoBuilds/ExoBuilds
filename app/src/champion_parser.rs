@@ -1,9 +1,12 @@
-use crate::{database::Database, models::{champion_model::Champion, recommended_champion_model::RecommendedChampion}};
-use std::{thread, time};
+use crate::{
+    database::Database,
+    models::{champion_model::Champion, recommended_champion_model::RecommendedChampion},
+    utils::get_champ_title,
+};
 use std::collections::HashMap;
+use std::{thread, time};
 
 fn get_highest_str(map: HashMap<String, i64>) -> String {
-    
     let mut result = String::new();
     let mut tmp: i64 = -1;
 
@@ -23,7 +26,6 @@ fn get_highest_str(map: HashMap<String, i64>) -> String {
 }
 
 fn get_highest(map: HashMap<i64, i64>) -> i64 {
-    
     let mut result: i64 = 0;
     let mut tmp: i64 = -1;
 
@@ -42,8 +44,12 @@ fn get_highest(map: HashMap<i64, i64>) -> i64 {
     result
 }
 
-fn read_matches(champion_name: String, matches: &Vec<Champion>, role: String) -> RecommendedChampion {
-
+fn read_matches(
+    champion_name: String,
+    matches: &Vec<Champion>,
+    role: String,
+) -> RecommendedChampion {
+    let mut title: String = "".into();
     let mut wins = 0;
     let mut loses = 0;
     let mut item0: HashMap<i64, i64> = HashMap::new();
@@ -73,22 +79,76 @@ fn read_matches(champion_name: String, matches: &Vec<Champion>, role: String) ->
             false => loses += 1,
         };
 
-        item0.insert(element.item0, *(item0.get(&element.item0).get_or_insert(&0)) + 1);
-        item1.insert(element.item1, *(item1.get(&element.item1).get_or_insert(&0)) + 1);
-        item2.insert(element.item2, *(item2.get(&element.item2).get_or_insert(&0)) + 1);
-        item3.insert(element.item3, *(item3.get(&element.item3).get_or_insert(&0)) + 1);
-        item4.insert(element.item4, *(item4.get(&element.item4).get_or_insert(&0)) + 1);
-        item5.insert(element.item5, *(item5.get(&element.item5).get_or_insert(&0)) + 1);
-        item6.insert(element.item6, *(item6.get(&element.item6).get_or_insert(&0)) + 1);
-        rune.insert(element.rune.clone(), *(rune.get(&element.rune.clone()).get_or_insert(&0)) + 1);
-        rune1.insert(element.rune1.clone(), *(rune1.get(&element.rune1.clone()).get_or_insert(&0)) + 1);
-        rune2.insert(element.rune2.clone(), *(rune2.get(&element.rune2.clone()).get_or_insert(&0)) + 1);
-        summoner1.insert(element.summoner1.clone(), *(summoner1.get(&element.summoner1.clone()).get_or_insert(&0)) + 1);
-        summoner2.insert(element.summoner2.clone(), *(summoner2.get(&element.summoner2.clone()).get_or_insert(&0)) + 1);
-        spellmax1.insert(element.spellmax1.clone(), *(spellmax1.get(&element.spellmax1.clone()).get_or_insert(&0)) + 1);
-        spellmax2.insert(element.spellmax2.clone(), *(spellmax2.get(&element.spellmax2.clone()).get_or_insert(&0)) + 1);
-        spellmax3.insert(element.spellmax3.clone(), *(spellmax3.get(&element.spellmax3.clone()).get_or_insert(&0)) + 1);
-        spellmax4.insert(element.spellmax4.clone(), *(spellmax4.get(&element.spellmax4.clone()).get_or_insert(&0)) + 1);
+        item0.insert(
+            element.item0,
+            *(item0.get(&element.item0).get_or_insert(&0)) + 1,
+        );
+        item1.insert(
+            element.item1,
+            *(item1.get(&element.item1).get_or_insert(&0)) + 1,
+        );
+        item2.insert(
+            element.item2,
+            *(item2.get(&element.item2).get_or_insert(&0)) + 1,
+        );
+        item3.insert(
+            element.item3,
+            *(item3.get(&element.item3).get_or_insert(&0)) + 1,
+        );
+        item4.insert(
+            element.item4,
+            *(item4.get(&element.item4).get_or_insert(&0)) + 1,
+        );
+        item5.insert(
+            element.item5,
+            *(item5.get(&element.item5).get_or_insert(&0)) + 1,
+        );
+        item6.insert(
+            element.item6,
+            *(item6.get(&element.item6).get_or_insert(&0)) + 1,
+        );
+        rune.insert(
+            element.rune.clone(),
+            *(rune.get(&element.rune.clone()).get_or_insert(&0)) + 1,
+        );
+        rune1.insert(
+            element.rune1.clone(),
+            *(rune1.get(&element.rune1.clone()).get_or_insert(&0)) + 1,
+        );
+        rune2.insert(
+            element.rune2.clone(),
+            *(rune2.get(&element.rune2.clone()).get_or_insert(&0)) + 1,
+        );
+        summoner1.insert(
+            element.summoner1.clone(),
+            *(summoner1.get(&element.summoner1.clone()).get_or_insert(&0)) + 1,
+        );
+        summoner2.insert(
+            element.summoner2.clone(),
+            *(summoner2.get(&element.summoner2.clone()).get_or_insert(&0)) + 1,
+        );
+        spellmax1.insert(
+            element.spellmax1.clone(),
+            *(spellmax1.get(&element.spellmax1.clone()).get_or_insert(&0)) + 1,
+        );
+        spellmax2.insert(
+            element.spellmax2.clone(),
+            *(spellmax2.get(&element.spellmax2.clone()).get_or_insert(&0)) + 1,
+        );
+        spellmax3.insert(
+            element.spellmax3.clone(),
+            *(spellmax3.get(&element.spellmax3.clone()).get_or_insert(&0)) + 1,
+        );
+        spellmax4.insert(
+            element.spellmax4.clone(),
+            *(spellmax4.get(&element.spellmax4.clone()).get_or_insert(&0)) + 1,
+        );
+    }
+
+    let tmp_title = get_champ_title(&champion_name);
+
+    if tmp_title.is_ok() {
+        title = tmp_title.unwrap();
     }
 
     RecommendedChampion {
@@ -96,7 +156,7 @@ fn read_matches(champion_name: String, matches: &Vec<Champion>, role: String) ->
         wins,
         loses,
         name: champion_name,
-        title: "Default title".into(),
+        title,
         item0: get_highest(item0),
         item1: get_highest(item1),
         item2: get_highest(item2),
@@ -115,22 +175,32 @@ fn read_matches(champion_name: String, matches: &Vec<Champion>, role: String) ->
         spellmax3: get_highest_str(spellmax3),
         spellmax4: get_highest_str(spellmax4),
     }
-
 }
 
 fn update_champion(db: &Database, champion_name: String, matches: Vec<Champion>) {
-
-    let _ = db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "TOP".into()));
-    let _ = db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "JUNGLE".into()));
-    let _ = db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "MIDDLE".into()));
-    let _ = db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "BOT".into()));
-    let _ = db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "UTILITY".into()));
-
+    let _ =
+        db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "TOP".into()));
+    let _ = db.update_recommended_champion(read_matches(
+        champion_name.clone(),
+        &matches,
+        "JUNGLE".into(),
+    ));
+    let _ = db.update_recommended_champion(read_matches(
+        champion_name.clone(),
+        &matches,
+        "MIDDLE".into(),
+    ));
+    let _ =
+        db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "BOT".into()));
+    let _ = db.update_recommended_champion(read_matches(
+        champion_name.clone(),
+        &matches,
+        "UTILITY".into(),
+    ));
 }
 
 pub fn initialize_champions(db: Database) {
     loop {
-
         let data = db.get_champions();
 
         if data.is_err() {
