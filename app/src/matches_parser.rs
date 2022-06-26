@@ -357,7 +357,7 @@ fn read_matches(
     }
 }
 
-pub fn initialize_matches(settings: &mut Settings, db: Database) {
+pub fn initialize_matches(mut settings: Settings, db: Database) {
     let mut clock = Instant::now();
     let mut requests: u32 = 80;
 
@@ -371,7 +371,7 @@ pub fn initialize_matches(settings: &mut Settings, db: Database) {
             continue;
         }
 
-        let mut matches = retrieve_matches(settings, &mut requests);
+        let mut matches = retrieve_matches(&mut settings, &mut requests);
         if matches.is_empty() {
             continue;
         }
@@ -380,6 +380,6 @@ pub fn initialize_matches(settings: &mut Settings, db: Database) {
             continue;
         }
 
-        read_matches(&db, settings, matches, &mut requests, &mut clock);
+        read_matches(&db, &settings, matches, &mut requests, &mut clock);
     }
 }

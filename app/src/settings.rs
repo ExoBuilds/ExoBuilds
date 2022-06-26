@@ -4,10 +4,11 @@ use dotenv::dotenv;
 
 use std::collections::VecDeque;
 
+#[derive(Clone)]
 pub struct Settings {
     pub mongo_uri: String,
     pub puuid: VecDeque<String>,
-    pub riot_api: String
+    pub riot_api: String,
 }
 
 impl Settings {
@@ -28,7 +29,7 @@ impl Settings {
         Self {
             mongo_uri: mongo_uri,
             puuid: puuid.split(":").map(|s| s.into()).collect(),
-            riot_api: riot_api
+            riot_api: riot_api,
         }
     }
 }

@@ -1,6 +1,10 @@
 use std::collections::HashMap;
 
 use crate::models::match_history_model::MatchHistory;
+use crate::models::profile_model::Profile;
+use crate::settings::Settings;
+
+use ureq::serde_json;
 
 // (champion_name: win, loses)
 fn get_highest(map: &HashMap<String, (i64, i64)>) -> (String, i64, i64) {
@@ -70,4 +74,37 @@ pub fn get_latest_icon(data: &Vec<MatchHistory>) -> String {
     }
 
     icon
+}
+
+pub fn get_player_profile(
+    settings: &Settings,
+    summoner_name: &String,
+) -> Result<Profile, ureq::Error> {
+    let mut profile = Profile::default();
+
+    let request = format!(
+        "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}",
+        summoner_name = summoner_name
+    );
+
+    let response: serde_json::Value = ureq::get(&request)
+        .set("X-Riot-Token", &settings.riot_api)
+        .call()?
+        .into_json()?;
+
+    if response.as_object().is_some() {
+        let map = response.as_object().unwrap();
+
+        if map.contains_key("name") && map.contains_key("puuid") {
+            let name = map.get("name").unwrap();
+            let puuid = map.get("puuid").unwrap();
+
+            if name.is_string() && puuid.is_string() {
+                profile.name = name.as_str().unwrap().into();
+                profile.puuid = puuid.as_str().unwrap().into();
+            }
+        }
+    }
+
+    Ok(profile)
 }

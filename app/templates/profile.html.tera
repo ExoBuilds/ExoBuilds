@@ -29,7 +29,7 @@
                     <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/profileicon/{{ icon }}.png" width="150rem" alt="{{ icon }}">
                 </div>
                 <div class="col-10" style="margin-top: 6rem;">
-                    <h1 style="font-weight:bold">{{ name }}</h1>
+                    <h1 style="font-weight:bold">{{ summoner_name }}</h1>
                     <button style="margin-top:1rem" type="button" class="btn btn-primary">Update</button>
                 </div>
             </div>

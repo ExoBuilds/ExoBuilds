@@ -1,7 +1,6 @@
 #[macro_use]
 extern crate rocket;
 
-use models::match_history_model::MatchHistory;
 use rocket::fs::FileServer;
 use rocket::State;
 use rocket_dyn_templates::context;
@@ -14,6 +13,7 @@ mod utils;
 use utils::*;
 
 mod models;
+use models::match_history_model::MatchHistory;
 
 mod database;
 use database::*;
@@ -124,26 +124,33 @@ fn champions(db: &State<Database>, name: &str) -> Template {
 }
 
 #[get("/profile/<name>")]
-fn profile(db: &State<Database>, name: &str) -> Template {
-    let puuid = "Y22N0dvmtG6NsF5GTpPJ4yhxI2t3zMvP5solMwWSqj1Ld-YAijBqMG5bDP9xYZ9EgVkyxiyifsMC_Q";
-
-    let player_matches = db.get_player_matches(puuid.clone());
-
+fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Template {
     let mut icon: String = "3879".into();
 
     let mut arrays: Vec<MatchHistory> = Vec::new();
     let mut champs: Vec<(String, String, String)> = Vec::new();
+    let mut summoner_name: String = name.into();
 
-    if player_matches.is_ok() {
-        arrays = player_matches.unwrap();
-        champs = get_most_played_champs(&arrays);
-        icon = get_latest_icon(&arrays);
+    let profile = get_player_profile(settings, &name.to_string());
+    if profile.is_ok() {
+        println!("profile completed!");
+        let profile = profile.unwrap();
+
+        summoner_name = profile.name;
+
+        let player_matches = db.get_player_matches(&profile.puuid);
+
+        if player_matches.is_ok() {
+            arrays = player_matches.unwrap();
+            champs = get_most_played_champs(&arrays);
+            icon = get_latest_icon(&arrays);
+        }
     }
 
     Template::render(
         "profile",
         context! {
-            name,
+            summoner_name,
             arrays,
             icon,
             champs,
@@ -153,15 +160,21 @@ fn profile(db: &State<Database>, name: &str) -> Template {
 
 #[launch]
 fn rocket() -> _ {
-    let mut settings = Settings::init();
+    let settings = Settings::init();
     let database = Database::init(&settings);
-    let tmp_db1 = database.clone();
-    let tmp_db2 = database.clone();
-    thread::spawn(move || initialize_matches(&mut settings, tmp_db1));
-    thread::spawn(move || initialize_champions(tmp_db2));
+    thread::spawn({
+        let database = database.clone();
+        let settings = settings.clone();
+        move || initialize_matches(settings, database)
+    });
+    thread::spawn({
+        let database = database.clone();
+        move || initialize_champions(database)
+    });
     rocket::build()
         .mount("/", routes![index, champions, profile])
         .mount("/", FileServer::from("public/"))
         .manage(database)
+        .manage(settings)
         .attach(Template::fairing())
 }
