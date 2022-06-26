@@ -18,7 +18,7 @@
   <body style="background-color: #070d20;color:lightgray">
     <nav class="navbar fixed-top navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="http://exobuilds.cc:8000/"><img src="../../images/logo2.png" height="50px" alt="Home"></a>
+        <a class="navbar-brand" href="http://exobuilds.cc"><img src="../../images/logo2.png" height="50px" alt="Home"></a>
       </div>
     </nav>
-    <h1 style="margin-top: 10rem;text-align:center">L'utilisateur recherché n'existe pas, cliquez <a href="http://exobuilds.cc:8000/">ici</a> pour retourner à l'acceuil</h1>
+    <h1 style="margin-top: 10rem;text-align:center">L'utilisateur recherché n'existe pas, cliquez <a href="http://exobuilds.cc">ici</a> pour retourner à l'acceuil</h1>
