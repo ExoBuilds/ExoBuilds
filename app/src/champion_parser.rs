@@ -244,6 +244,7 @@ pub fn initialize_champions(db: Database) {
             update_champion(&db, champion_name, matches);
         }
 
-        thread::sleep(time::Duration::from_secs(300));
+        // update every 15 mins
+        thread::sleep(time::Duration::from_secs(15*60));
     }
 }
