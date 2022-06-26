@@ -4,8 +4,6 @@ use crate::matches_parser::serde_json::Value;
 use crate::models::champion_model::Champion;
 use crate::models::data_model::Data;
 use crate::settings::Settings;
-use core::time;
-use std::thread;
 use ureq::serde_json;
 
 use std::collections::HashSet;
