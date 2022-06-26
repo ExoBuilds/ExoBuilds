@@ -15,10 +15,9 @@ RUN cargo chef cook --release --recipe-path recipe.json
 COPY app/ .
 RUN cargo build --release --bin exobuilds-website
 
-FROM debian:buster-slim as runner
-RUN apt-get -qy update && apt-get -qy install \
-    libc6-dev
-COPY --from=builder /app/bin/exobuilds-website /usr/local/bin/exobuilds-website
+FROM ubuntu:22.04 as runner
+RUN apt-get -qy update && apt-get upgrade
+COPY --from=builder /app/target/release/exobuilds-website /usr/local/bin/exobuilds-website
 COPY --from=builder /app/public /public
 COPY --from=builder /app/templates /templates
 CMD exobuilds-website
