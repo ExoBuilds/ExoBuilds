@@ -49,7 +49,8 @@ pub fn get_most_played_champs(puuid: String, data: &Vec<Data>) -> Vec<(String, S
 
     for _ in 0..3 {
         let highest = get_highest(&tmp);
-        champions.push((highest.0.clone(), highest.1.to_string(), highest.2.to_string()));
+        let winrate = (((highest.1 as f32) / ((highest.1 + highest.2) as f32)) * 100.0) as u32;
+        champions.push((highest.0.clone(), (highest.1 + highest.2).to_string(), winrate.to_string()));
         tmp.remove(&highest.0);
     }
 
