@@ -222,7 +222,7 @@ fn update_champion(db: &Database, champion_name: String, matches: Vec<Champion>)
         "MIDDLE".into(),
     ));
     let _ =
-        db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "BOT".into()));
+        db.update_recommended_champion(read_matches(champion_name.clone(), &matches, "BOTTOM".into()));
     let _ = db.update_recommended_champion(read_matches(
         champion_name.clone(),
         &matches,
