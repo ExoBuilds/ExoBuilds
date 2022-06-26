@@ -29,8 +29,17 @@
           <div class="col-2" style="margin-top: 4rem;">
             <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ name }}.png" alt="{{ name }}">
           </div>
-          <div class="col-1">
-            <span style="text-align:center">{{ winrate }}%</span>
+          <div class="col-1" style="margin-top:6.6rem">
+          {% if winrate > 53 %}
+            <h3 style="text-align:center;color:yellow">{{ winrate }}%</h3>
+          {% elif winrate > 51 %}
+            <h3 style="text-align:center;color:blue">{{ winrate }}%</h3>
+          {% elif winrate > 49 %}
+            <h3 style="text-align:center;color:white">{{ winrate }}%</h3>
+          {% else %}
+            <h3 style="text-align:center;color:red">{{ winrate }}%</h3>
+          {% endif %}
+          
           </div>
           <div class="col-8" style="margin-top: 6rem;">
             <h1 style="font-weight:bold">{{ name }} - {{ title }}</h1>
