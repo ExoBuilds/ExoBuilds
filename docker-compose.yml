@@ -5,4 +5,4 @@ app:
   environment:
     - ROCKET_ADDRESS=0.0.0.0
   volumes:
-    - app/output/:/output
+    - output/:/output
