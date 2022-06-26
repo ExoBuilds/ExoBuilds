@@ -8,12 +8,18 @@ use ureq::serde_json;
 
 use std::collections::HashSet;
 
-fn retrieve_match(settings: &Settings, puuid: &String, count: usize) -> Result<HashSet<String>, ureq::Error> {
+fn retrieve_match(settings: &Settings, puuid: &String, queue_type: u16, count: usize) -> Result<HashSet<String>, ureq::Error> {
     let mut matches: HashSet<String> = HashSet::new();
 
+    let queue = match queue_type {
+        1 => "ranked",
+        _ => "normal"
+    };
+
     let request = format!(
-        "https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={ids}",
+        "https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?type={queue}&start=0&count={ids}",
         puuid = puuid,
+        queue = queue,
         ids = count
     );
 
@@ -226,6 +232,8 @@ fn read_champ(map: &Map<String, Value>) -> Champion {
         assists: map.get("assists").unwrap().as_i64().unwrap(),
         champion_name: map.get("championName").unwrap().as_str().unwrap().into(),
         minions_killed: map.get("totalMinionsKilled").unwrap().as_i64().unwrap(),
+        neutral_minions_killed: map.get("neutralMinionsKilled").unwrap().as_i64().unwrap(),
+        total_minions_killed: map.get("totalMinionsKilled").unwrap().as_i64().unwrap() + map.get("neutralMinionsKilled").unwrap().as_i64().unwrap(),
         item0: map.get("item0").unwrap().as_i64().unwrap().into(),
         item1: map.get("item1").unwrap().as_i64().unwrap().into(),
         item2: map.get("item2").unwrap().as_i64().unwrap().into(),
@@ -314,13 +322,27 @@ fn read_matches(
 }
 
 pub fn update_latest_matches(settings: &Settings, db: &Database, puuid: &String) {
-    let matches = retrieve_match(settings, puuid, 5);
+    let matches = retrieve_match(settings, puuid, 0, 5);
+
+    println!("no error");
 
     if matches.is_err() {
         return;
     }
 
+    println!("no first error");
+
+    let matches2 = retrieve_match(settings, puuid, 1, 5);
+
+    if matches2.is_err() {
+        return;
+    }
+
+    println!("no second error");
+
     let mut matches = matches.unwrap();
+
+    matches.extend(matches2.unwrap());
 
     if matches.is_empty() {
         return;

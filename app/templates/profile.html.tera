@@ -64,7 +64,17 @@
                                 {% endif %}
                                 <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ array.player_champion.champion_name }}.png" width="5%" alt="{{ array.player_champion.champion_name }}" style="margin-left: 3rem;">
                                 <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.kills }}/{{ array.player_champion.deaths }}/{{ array.player_champion.assists }}</span>
-                                <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.minions_killed }} cs</span>
+                                {% if array.player_champion.role == "JUNGLE" %}
+                                    <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.neutral_minions_killed }} 
+                                        <span style="color: red"> (+{{ array.player_champion.minions_killed }})</span>
+                                        cs
+                                    </span>
+                                {% else %}
+                                    <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.minions_killed }} 
+                                        <span style="color: red"> (+{{ array.player_champion.neutral_minions_killed }})</span>
+                                        cs
+                                    </span>
+                                {% endif %}
                                 <span style="margin-left: 3rem;font-weight:bold;text-align:end;color:white">{{ (array.data.match_duration / 60) | round }} mins</span>
                             </button>
                             </h2>
@@ -74,11 +84,27 @@
                                         {% for j in [1,2] %}
                                         <div class="col-6" style="color: white;">
                                             {% for a in [1,2,3,4,5] %}
-                                            {% set n = (j * a) - 1 %}
+                                            {% if j == 1 %}
+                                                {% set n = a - 1 %}
+                                            {% else %}
+                                                {% set n = (5 + a) - 1 %}
+                                            {% endif %}
                                             {% set champ = array.data.champions[n] %}
                                             <div>
                                                 <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ champ.champion_name }}.png" width="5%" alt="{{ champ.champion_name }}" style="margin-left: 3rem;">
-                                                <span style="margin-left: 3rem">{{ champ.kills }}/{{ champ.deaths }}/{{ champ.assists }} [kda] - {{ champ.minions_killed }} cs</span>
+                                                <span style="margin-left: 3rem">{{ champ.kills }}/{{ champ.deaths }}/{{ champ.assists }} [kda] - 
+                                                    {% if champ.role == "JUNGLE" %}
+                                                        <span>{{ champ.neutral_minions_killed }} 
+                                                            <span style="color: red"> (+{{ champ.minions_killed }})</span>
+                                                            cs
+                                                        </span>
+                                                    {% else %}
+                                                        <span>{{ champ.minions_killed }} 
+                                                            <span style="color: red"> (+{{ champ.neutral_minions_killed }})</span>
+                                                            cs
+                                                            </span>
+                                                    {% endif %}
+                                                </span>
                                             </div>
                                             {% endfor %}
                                         </div>

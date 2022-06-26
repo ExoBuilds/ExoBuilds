@@ -15,6 +15,8 @@ pub struct Champion {
     pub item5: i64,
     pub item6: i64,
     pub minions_killed: i64,
+    pub neutral_minions_killed: i64,
+    pub total_minions_killed: i64,
     pub role: String,
     pub rune: String,
     pub rune1: String,
