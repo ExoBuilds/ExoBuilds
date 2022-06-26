@@ -8,7 +8,12 @@ use rocket::fs::FileServer;
 
 use std::thread;
 
+mod utils;
+use utils::*;
+
 mod models;
+use models::data_model::Data;
+
 mod database;
 use database::*;
 
@@ -101,25 +106,28 @@ fn champions(db: &State<Database>, name: &str) -> Template {
 }
 
 #[get("/profile/<name>")]
-fn profile(name: &str) -> Template {
-    Template::render("profile", context! {
-        name: name,
-        icon: "4603",
-        champion1: "Zyra",
-        champion1game: "10",
-        champion1rate: "50",
-        champion2: "Jhin",
-        champion2game: "7",
-        champion3: "Xerath",
-        champion3game: "3",
-        game1kill: "13",
-        game1death: "13",
-        game1assist: "13",
-        game1time: "13",
-        game1cs: "13",
-        game1state: "win",
-        game1champion: "Zilean"
+fn profile(db: &State<Database>, name: &str) -> Template {
 
+    let puuid = "Y22N0dvmtG6NsF5GTpPJ4yhxI2t3zMvP5solMwWSqj1Ld-YAijBqMG5bDP9xYZ9EgVkyxiyifsMC_Q";
+
+    let player_matches = db.get_player_matches(puuid.clone());
+
+    let mut icon: String = "4603".into();
+
+    let mut arrays: Vec<Data> = Vec::new();
+    let mut champs: Vec<(String, String, String)> = vec![("Zyra".into(), "10".into(), "50".into())];
+
+    if player_matches.is_ok() {
+        arrays = player_matches.unwrap();
+        champs = get_most_played_champs(puuid.clone().into(), &arrays);
+        icon = get_latest_icon(puuid.clone().into(), &arrays);
+    }
+
+    Template::render("profile", context! {
+        name,
+        arrays,
+        icon,
+        champs,
     })
 }
 

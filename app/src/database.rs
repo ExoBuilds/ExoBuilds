@@ -110,4 +110,21 @@ impl Database {
         Ok(target)
     }
 
+    pub fn get_player_matches(&self, puuid: &str) -> Result<Vec<Data>, Error> {
+        let mut result: Vec<Data> = Vec::new();
+        let data = self.
+            data
+            .find(doc! {"champions.puuid": puuid}, None)
+            .ok()
+            .expect("Error whilst retrieve player matches");
+        for target in data.into_iter() {
+            if target.is_err() {
+                continue;
+            }
+            result.push(target.unwrap());
+        }
+        result.sort_by(|a, b| a.match_creation.cmp(&b.match_creation));
+        Ok(result)
+    }
+
 }
