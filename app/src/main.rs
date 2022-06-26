@@ -13,7 +13,6 @@ mod utils;
 use utils::*;
 
 mod models;
-use models::match_history_model::MatchHistory;
 
 mod database;
 use database::*;
@@ -125,37 +124,30 @@ fn champions(db: &State<Database>, name: &str) -> Template {
 
 #[get("/profile/<name>")]
 fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Template {
-    let mut icon: String = "3879".into();
-
-    let mut arrays: Vec<MatchHistory> = Vec::new();
-    let mut champs: Vec<(String, String, String)> = Vec::new();
-    let mut summoner_name: String = name.into();
-
     let profile = get_player_profile(settings, &name.to_string());
-    if profile.is_ok() {
-        println!("profile completed!");
+    if profile.is_err() {
+        Template::render("errorprofile", context! {})
+    } else {
         let profile = profile.unwrap();
 
-        summoner_name = profile.name;
+        let summoner_name: String = profile.name;
 
         let player_matches = db.get_player_matches(&profile.puuid);
 
-        if player_matches.is_ok() {
-            arrays = player_matches.unwrap();
-            champs = get_most_played_champs(&arrays);
-            icon = get_latest_icon(&arrays);
-        }
-    }
+        let arrays = player_matches.unwrap();
+        let champs = get_most_played_champs(&arrays);
+        let icon = get_latest_icon(&arrays);
 
-    Template::render(
-        "profile",
-        context! {
-            summoner_name,
-            arrays,
-            icon,
-            champs,
-        },
-    )
+        Template::render(
+            "profile",
+            context! {
+                summoner_name,
+                arrays,
+                icon,
+                champs,
+            },
+        )
+    }
 }
 
 #[launch]

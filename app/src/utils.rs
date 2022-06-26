@@ -47,7 +47,9 @@ pub fn get_most_played_champs(data: &Vec<MatchHistory>) -> Vec<(String, String, 
         tmp.insert(element.player_champion.champion_name.clone(), result);
     }
 
-    for _ in 0..3 {
+    let mut i = 3;
+
+    while i > 0 && tmp.len() > 0 {
         let highest = get_highest(&tmp);
         let winrate = (((highest.1 as f32) / ((highest.1 + highest.2) as f32)) * 100.0) as u32;
         champions.push((
@@ -56,6 +58,7 @@ pub fn get_most_played_champs(data: &Vec<MatchHistory>) -> Vec<(String, String, 
             winrate.to_string(),
         ));
         tmp.remove(&highest.0);
+        i -= 1;
     }
 
     champions
