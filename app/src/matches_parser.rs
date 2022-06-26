@@ -4,18 +4,19 @@ use crate::matches_parser::serde_json::Value;
 use crate::models::champion_model::Champion;
 use crate::models::data_model::Data;
 use crate::settings::Settings;
-use std::time::Instant;
+use core::time;
+use std::thread;
 use ureq::serde_json;
 
 use std::collections::HashSet;
 
-fn retrieve_match(settings: &Settings, puuid: &String) -> Result<Vec<String>, ureq::Error> {
-    let mut matches: Vec<String> = Vec::new();
+fn retrieve_match(settings: &Settings, puuid: &String, count: usize) -> Result<HashSet<String>, ureq::Error> {
+    let mut matches: HashSet<String> = HashSet::new();
 
     let request = format!(
-        "https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/{ids}",
+        "https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={ids}",
         puuid = puuid,
-        ids = "ids?start=0&count=100"
+        ids = count
     );
 
     let mut response: serde_json::Value = ureq::get(&request)
@@ -27,42 +28,12 @@ fn retrieve_match(settings: &Settings, puuid: &String) -> Result<Vec<String>, ur
             let response = response.as_array_mut().unwrap();
 
             for element in response.to_vec().into_iter() {
-                matches.push(element.as_str().unwrap().into());
+                matches.insert(element.as_str().unwrap().into());
             }
         }
 
         matches
     })
-}
-
-fn retrieve_matches(settings: &mut Settings, requests: &mut u32) -> HashSet<String> {
-    let mut matches = HashSet::new();
-    let mut size = settings.puuid.len();
-
-    while *requests >= 40 && size > 0 {
-        if settings.puuid.is_empty() {
-            return matches;
-        }
-
-        let puuid = settings.puuid.pop_front().unwrap();
-
-        let target = retrieve_match(settings, &puuid);
-        settings.puuid.push_back(puuid);
-
-        if target.is_err() {
-            *requests = 0;
-            continue;
-        }
-
-        let target: HashSet<String> = target.unwrap().into_iter().collect();
-
-        matches.extend(target);
-
-        *requests -= 1;
-        size -= 1;
-    }
-
-    matches
 }
 
 fn filter_matches(db: &Database, matches: &mut HashSet<String>) {
@@ -329,57 +300,39 @@ fn read_matches(
     db: &Database,
     settings: &Settings,
     mut matches: HashSet<String>,
-    requests: &mut u32,
-    clock: &mut Instant,
 ) {
     while matches.len() > 0 {
-        if clock.elapsed().as_secs() > 120 {
-            *clock = Instant::now();
-            *requests = 80;
-        }
-
-        if *requests == 0 {
-            continue;
-        }
 
         let element = matches.iter().next().cloned().unwrap();
 
         let target = read_match(settings, &element);
         if target.is_err() {
-            *requests = 0;
+            thread::sleep(time::Duration::from_secs(120));
             continue;
         }
         matches.take(&element).unwrap();
 
         let _ = db.add_data(target.unwrap());
-
-        *requests -= 1;
     }
 }
 
-pub fn initialize_matches(mut settings: Settings, db: Database) {
-    let mut clock = Instant::now();
-    let mut requests: u32 = 80;
+pub fn update_latest_matches(settings: &Settings, db: &Database, puuid: &String) {
+        let matches = retrieve_match(settings, puuid, 20);
 
-    loop {
-        if clock.elapsed().as_secs() > 120 {
-            clock = Instant::now();
-            requests = 80;
+        if matches.is_err() {
+            return;
         }
 
-        if requests == 0 {
-            continue;
-        }
+        let mut matches = matches.unwrap();
 
-        let mut matches = retrieve_matches(&mut settings, &mut requests);
         if matches.is_empty() {
-            continue;
+            return;
         }
         filter_matches(&db, &mut matches);
         if matches.is_empty() {
-            continue;
+            return;
         }
 
-        read_matches(&db, &settings, matches, &mut requests, &mut clock);
+        read_matches(db, settings, matches);
+
     }
-}

@@ -30,7 +30,9 @@
                 </div>
                 <div class="col-10" style="margin-top: 6rem;">
                     <h1 style="font-weight:bold">{{ summoner_name }}</h1>
-                    <form action="" method="post">
+                    <form action="/update_profile" method="post">
+                    <input type="hidden" name="summoner_name" value={{ summoner_name }}></input>
+                    <input type="hidden" name="puuid" value={{ puuid }}></input>
                         <button type="submit" style="margin-top:1rem" type="button" class="btn btn-primary">Update</button>
                     </form>
                 </div>

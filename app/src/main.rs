@@ -3,9 +3,12 @@ extern crate rocket;
 
 use rocket::fs::FileServer;
 use rocket::State;
+use rocket::response::Redirect;
 use rocket_dyn_templates::context;
 use rocket_dyn_templates::Template;
 use std::collections::HashMap;
+
+use rocket::form::{Form, FromForm};
 
 use std::thread;
 
@@ -21,7 +24,7 @@ mod settings;
 use settings::Settings;
 
 mod matches_parser;
-use matches_parser::initialize_matches;
+use matches_parser::update_latest_matches;
 
 mod champion_parser;
 use champion_parser::initialize_champions;
@@ -145,6 +148,8 @@ fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Temp
 
         let player_matches = db.get_player_matches(&profile.puuid);
 
+        let puuid = profile.puuid;
+        
         let arrays = player_matches.unwrap();
         let champs = get_most_played_champs(&arrays);
         let icon = get_latest_icon(&arrays);
@@ -152,6 +157,7 @@ fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Temp
         Template::render(
             "profile",
             context! {
+                puuid,
                 summoner_name,
                 arrays,
                 icon,
@@ -161,20 +167,22 @@ fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Temp
     }
 }
 
-#[post("/profile/<name>")]
-fn submit<'r>(db: &State<Database>, settings: &State<Settings>, name: &str) -> Template {
-    profile(db, settings, name)
+#[derive(Debug, FromForm)]
+struct PlayerUpdate<'v> {
+    puuid: &'v str,
+    summoner_name: &'v str,
+}
+
+#[post("/update_profile", data = "<form>")]
+fn submit<'r>(db: &State<Database>, settings: &State<Settings>, form: Form<PlayerUpdate<'_>>) -> Redirect {
+    update_latest_matches(settings, db, &form.puuid.to_string());
+    Redirect::to("/profile/".to_owned() + form.summoner_name)
 }
 
 #[launch]
 fn rocket() -> _ {
     let settings = Settings::init();
     let database = Database::init(&settings);
-    thread::spawn({
-        let database = database.clone();
-        let settings = settings.clone();
-        move || initialize_matches(settings, database)
-    });
     thread::spawn({
         let database = database.clone();
         move || initialize_champions(database)
