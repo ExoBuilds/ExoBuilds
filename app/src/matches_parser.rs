@@ -331,5 +331,4 @@ pub fn update_latest_matches(settings: &Settings, db: &Database, puuid: &String)
     }
 
     read_matches(db, settings, matches);
-
 }
