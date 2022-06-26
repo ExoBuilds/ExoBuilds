@@ -1,7 +1,7 @@
 FROM rust:latest as builder
 WORKDIR /app
 COPY app/ .
-RUN cargo install --path . --root .
+RUN cargo install --path . --root . --target-dir /output
 
 FROM debian:buster-slim as runner
 COPY --from=builder /app/bin/exobuilds-website /usr/local/bin/exobuilds-website
