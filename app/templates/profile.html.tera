@@ -65,7 +65,7 @@
                                 <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ array.player_champion.champion_name }}.png" width="5%" alt="{{ array.player_champion.champion_name }}" style="margin-left: 3rem;">
                                 <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.kills }}/{{ array.player_champion.deaths }}/{{ array.player_champion.assists }}</span>
                                 <span style="margin-left: 3rem;font-weight:bold;color:white">{{ array.player_champion.minions_killed }} cs</span>
-                                <span style="margin-left: 3rem;font-weight:bold;text-align:end;color:white">{{ ((array.data.match_duration / 60)) }} mins</span>
+                                <span style="margin-left: 3rem;font-weight:bold;text-align:end;color:white">{{ (array.data.match_duration / 60) | round }} mins</span>
                             </button>
                             </h2>
                             <div id="collapse{{ array.data.match_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ array.data.match_id }}" data-bs-parent="#accordionExample">
@@ -78,7 +78,7 @@
                                             {% set champ = array.data.champions[n] %}
                                             <div>
                                                 <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ champ.champion_name }}.png" width="5%" alt="{{ champ.champion_name }}" style="margin-left: 3rem;">
-                                                <span style="margin-left: 3rem">{{ champ.kills }}/{{ champ.deaths }}/{{ champ.assists }}</span>
+                                                <span style="margin-left: 3rem">{{ champ.kills }}/{{ champ.deaths }}/{{ champ.assists }} [kda] - {{ champ.minions_killed }} cs</span>
                                             </div>
                                             {% endfor %}
                                         </div>
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                      
+                    </div>
                 </div>
                 <div class="col-1"></div>
             </div>
