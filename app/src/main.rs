@@ -153,9 +153,11 @@ fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Temp
 
         let puuid = profile.puuid;
         
-        let arrays = player_matches.unwrap();
+        let mut arrays = player_matches.unwrap();
         let champs = get_most_played_champs(&arrays);
         let icon = get_latest_icon(&arrays);
+        
+        arrays.retain(|element| element.player_champion.role != "");
 
         Template::render(
             "profile",

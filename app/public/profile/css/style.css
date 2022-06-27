@@ -4,3 +4,49 @@ body {
     cursor:default;
     color: lightgray;
 }
+
+.accordion-text {
+    display: flex;
+    gap: 2rem;
+}
+
+.state {
+    padding-right: 2rem;
+}
+
+.accordion-text img {
+    width: 10%;
+}
+
+.accordion-text span {
+    margin-top: 0.6rem;
+}
+
+.accordion-item {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.accordion-button {
+    background-color: #212529;
+    display: flex;
+    flex: 0 0 100%;
+    max-width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #212529;
+}
+
+.accordion-image {
+    text-align: right;
+    margin-right: 2rem;
+    width: 20%;
+}
+
+.accordion-body {
+}
