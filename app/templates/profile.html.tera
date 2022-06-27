@@ -95,7 +95,8 @@
                                             {% endif %}
                                             {% set champ = array.data.champions[n] %}
                                             <div>
-                                                <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ champ.champion_name }}.png" width="10%" alt="{{ champ.champion_name }}" style="margin-left: 3rem; margin-bottom: 1.5rem">
+                                            <img src="images/{{ champ.role }}.png" style="vertical-align:sub;margin-left:2.2rem" width="10%">
+                                                <img src="http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/{{ champ.champion_name }}.png" width="10%" alt="{{ champ.champion_name }}" style="margin-left: 1.2rem; margin-bottom: 1.5rem">
                                                 <span style="vertical-align: super;margin-left: 3rem">{{ champ.kills }}/{{ champ.deaths }}/{{ champ.assists }} [kda] - 
                                                     {% if champ.role == "JUNGLE" %}
                                                         <span>{{ champ.neutral_minions_killed }} 
