@@ -61,7 +61,7 @@ fn champions(db: &State<Database>, name: &str) -> Template {
     let mut summoner1 = "Flash".into();
     let mut summoner2 = "Dot".into();
     let mut role = "JUNGLE".into();
-    let mut winrate = 50;
+    let mut winrate = 50.0;
     let mut games = 2;
 
     if champion.is_ok() {
@@ -99,7 +99,8 @@ fn champions(db: &State<Database>, name: &str) -> Template {
         summoner1 = champion.summoner1;
         summoner2 = champion.summoner2;
         role = champion.role;
-        winrate = ((champion.wins as f32 / (champion.wins + champion.loses) as f32) * 100.0) as i32;
+        winrate = (champion.wins as f64 / (champion.wins + champion.loses) as f64) * 100.0;
+        winrate = format!("{:.2}", winrate).parse::<f64>().unwrap();
         spellmax1 = champion.spellpath1;
         spellmax2 = champion.spellpath2;
         spellmax3 = champion.spellpath3;

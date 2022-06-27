@@ -312,10 +312,10 @@ fn read_matches(
         let element = matches.iter().next().cloned().unwrap();
 
         let target = read_match(settings, &element);
+        let _ = matches.remove(&element);
         if target.is_err() {
-            return;
+            continue;
         }
-        matches.take(&element).unwrap();
 
         let _ = db.add_data(target.unwrap());
     }
