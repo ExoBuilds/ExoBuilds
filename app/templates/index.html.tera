@@ -16,17 +16,12 @@
     <title>ExoBuilds</title>
   </head>
   <body>
-    <nav class="navbar fixed-top navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="http://exobuilds.cc"><img src="images/logo2.png" height="50px" alt="Home"></a>
-      </div>
-    </nav>
     <div class="row" style="margin-top: 7rem;">
       <div class="col-1"></div>
       <div class="col-10">
-        <img src="images/logo2.png" height="200px" class="rounded mx-auto d-block" alt="...">
+        <div class="col-11"><img src="images/logo2.png" height="300px" class="rounded mx-auto d-block" alt="..."></div>
         {# Barre de recherche #}
-          <div class="row" style="margin-top:5rem">
+          <div class="row" style="margin-bottom:6rem;">
             <div class="col-2"></div>
             <div class="col-6">
               <input id="search-champ" class="form-control form-control-lg" type="text" placeholder="Rechercher un champion ou profile" aria-label=".form-control-lg" onkeyup="search_champ()"/>

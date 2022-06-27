@@ -25,6 +25,7 @@ body {
 .accordion-item {
     flex: 0 0 100%;
     max-width: 100%;
+    border: 0.19rem solid rgba(0,0,0,.125)
 }
 
 .accordion-button {

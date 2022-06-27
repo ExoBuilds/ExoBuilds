@@ -16,9 +16,9 @@
     <title>ExoBuilds</title>
   </head>
   <body>
-    <nav class="navbar fixed-top navbar-dark bg-dark">
+    <nav class="navbar fixed-top navbar-dark" style="background-color:#0d101e">
       <div class="container-fluid">
-        <a class="navbar-brand" href="http://exobuilds.cc/"><img src="images/logo2.png" height="50px" alt="Home"></a>
+        <a class="navbar-brand" style="margin-left:2rem" href="http://exobuilds.cc"><img src="../../images/logo2.png" height="80px" alt="Home"></a>
       </div>
     </nav>
     <div class="row" style="margin-top: 4rem;">
