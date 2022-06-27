@@ -313,7 +313,7 @@ fn read_matches(
 
         let target = read_match(settings, &element);
         if target.is_err() {
-            continue;
+            return;
         }
         matches.take(&element).unwrap();
 

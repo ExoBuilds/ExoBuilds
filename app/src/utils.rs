@@ -95,7 +95,7 @@ pub fn get_player_profile(
         .call()?
         .into_json()?;
 
-    if response.as_object().is_some() {
+    if response.is_object() {
         let map = response.as_object().unwrap();
 
         if map.contains_key("name") && map.contains_key("puuid") {

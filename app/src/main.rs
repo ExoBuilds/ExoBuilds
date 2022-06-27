@@ -157,7 +157,7 @@ fn profile(db: &State<Database>, settings: &State<Settings>, name: &str) -> Temp
         let champs = get_most_played_champs(&arrays);
         let icon = get_latest_icon(&arrays);
         
-        arrays.retain(|element| element.player_champion.role != "");
+        arrays.retain(|element| element.player_champion.role != "" && element.data.champions.len() == 10);
 
         Template::render(
             "profile",
