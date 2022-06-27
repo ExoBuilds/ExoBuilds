@@ -44,6 +44,173 @@ fn get_highest(map: HashMap<i64, i64>) -> i64 {
     result
 }
 
+fn get_next_item(item_id: u32, role: &String, matches: &Vec<Champion>) -> HashMap<i64, i64> {
+    let mut item: HashMap<i64, i64> = HashMap::new();
+
+    for element in matches {
+        if &element.role != role {
+            continue;
+        }
+
+        match item_id {
+            0 => item.insert(
+                element.item0,
+                *(item.get(&element.item0).get_or_insert(&0)) + 1,
+            ),
+            1 => item.insert(
+                element.item1,
+                *(item.get(&element.item1).get_or_insert(&0)) + 1,
+            ),
+            2 => item.insert(
+                element.item2,
+                *(item.get(&element.item2).get_or_insert(&0)) + 1,
+            ),
+            3 => item.insert(
+                element.item3,
+                *(item.get(&element.item3).get_or_insert(&0)) + 1,
+            ),
+            4 => item.insert(
+                element.item4,
+                *(item.get(&element.item4).get_or_insert(&0)) + 1,
+            ),
+            5 => item.insert(
+                element.item5,
+                *(item.get(&element.item5).get_or_insert(&0)) + 1,
+            ),
+            _ => item.insert(
+                element.item6,
+                *(item.get(&element.item6).get_or_insert(&0)) + 1,
+            ),
+        };
+
+    }
+
+    item
+
+}
+
+fn get_next_rune(rune_id: u32, role: &String, matches: &Vec<Champion>) -> HashMap<String, i64> {
+    let mut rune: HashMap<String, i64> = HashMap::new();
+
+    for element in matches {
+        if &element.role != role {
+            continue;
+        }
+
+        match rune_id {
+            0 => rune.insert(
+                element.rune.clone(),
+                *(rune.get(&element.rune).get_or_insert(&0)) + 1,
+            ),
+            1 => rune.insert(
+                element.rune1.clone(),
+                *(rune.get(&element.rune1).get_or_insert(&0)) + 1,
+            ),
+            _ => rune.insert(
+                element.rune2.clone(),
+                *(rune.get(&element.rune2).get_or_insert(&0)) + 1,
+            ),
+        };
+
+    }
+
+    rune
+
+}
+
+fn get_next_spell(spell_id: u32, role: &String, matches: &Vec<Champion>) -> HashMap<String, i64> {
+    let mut spell: HashMap<String, i64> = HashMap::new();
+
+    for element in matches {
+        if &element.role != role {
+            continue;
+        }
+
+        match spell_id {
+            0 => spell.insert(
+                element.spellmax1.clone(),
+                *(spell.get(&element.spellmax1).get_or_insert(&0)) + 1,
+            ),
+            1 => spell.insert(
+                element.spellmax2.clone(),
+                *(spell.get(&element.spellmax2).get_or_insert(&0)) + 1,
+            ),
+            2 => spell.insert(
+                element.spellmax3.clone(),
+                *(spell.get(&element.spellmax3).get_or_insert(&0)) + 1,
+            ),
+            _ => spell.insert(
+                element.spellmax4.clone(),
+                *(spell.get(&element.spellmax4).get_or_insert(&0)) + 1,
+            ),
+        };
+
+    }
+
+    spell
+
+}
+
+fn get_next_summoner(summoner_id: u32, role: &String, matches: &Vec<Champion>) -> HashMap<String, i64> {
+    let mut summoner: HashMap<String, i64> = HashMap::new();
+
+    for element in matches {
+        if &element.role != role {
+            continue;
+        }
+
+        match summoner_id {
+            0 => summoner.insert(
+                element.summoner1.clone(),
+                *(summoner.get(&element.summoner1).get_or_insert(&0)) + 1,
+            ),
+            _ => summoner.insert(
+                element.summoner2.clone(),
+                *(summoner.get(&element.summoner2).get_or_insert(&0)) + 1,
+            ),
+        };
+
+    }
+
+    summoner
+
+}
+
+fn remove_item_not_present(item_id: u32, item: i64, role: &String, matches: &mut Vec<Champion>) {
+
+    match item_id {
+        0 => matches.retain(|element| (&element.role == role && element.item0 == item)),
+        1 => matches.retain(|element| (&element.role == role && element.item1 == item)),
+        2 => matches.retain(|element| (&element.role == role && element.item2 == item)),
+        3 => matches.retain(|element| (&element.role == role && element.item3 == item)),
+        4 => matches.retain(|element| (&element.role == role && element.item4 == item)),
+        5 => matches.retain(|element| (&element.role == role && element.item5 == item)),
+        _ => matches.retain(|element| (&element.role == role && element.item6 == item)),
+    };
+
+}
+
+fn remove_rune_not_present(rune_id: u32, rune: &String, role: &String, matches: &mut Vec<Champion>) {
+
+    match rune_id {
+        0 => matches.retain(|element| (&element.role == role && &element.rune == rune)),
+        1 => matches.retain(|element| (&element.role == role && &element.rune1 == rune)),
+        _ => matches.retain(|element| (&element.role == role && &element.rune2 == rune)),
+    };
+
+}
+
+fn remove_spell_not_present(spell_id: u32, spell: &String, role: &String, matches: &mut Vec<Champion>) {
+
+    match spell_id {
+        0 => matches.retain(|element| (&element.role == role && &element.spellmax1 == spell)),
+        1 => matches.retain(|element| (&element.role == role && &element.spellmax2 == spell)),
+        2 => matches.retain(|element| (&element.role == role && &element.spellmax3 == spell)),
+        _ => matches.retain(|element| (&element.role == role && &element.spellmax4 == spell)),
+    };
+
+}
+
 fn read_matches(
     champion_name: String,
     matches: &Vec<Champion>,
@@ -52,22 +219,22 @@ fn read_matches(
     let mut title: String = "".into();
     let mut wins = 0;
     let mut loses = 0;
-    let mut item0: HashMap<i64, i64> = HashMap::new();
-    let mut item1: HashMap<i64, i64> = HashMap::new();
-    let mut item3: HashMap<i64, i64> = HashMap::new();
-    let mut item2: HashMap<i64, i64> = HashMap::new();
-    let mut item4: HashMap<i64, i64> = HashMap::new();
-    let mut item5: HashMap<i64, i64> = HashMap::new();
-    let mut item6: HashMap<i64, i64> = HashMap::new();
-    let mut rune: HashMap<String, i64> = HashMap::new();
-    let mut rune1: HashMap<String, i64> = HashMap::new();
-    let mut rune2: HashMap<String, i64> = HashMap::new();
-    let mut summoner1: HashMap<String, i64> = HashMap::new();
-    let mut summoner2: HashMap<String, i64> = HashMap::new();
-    let mut spellmax1: HashMap<String, i64> = HashMap::new();
-    let mut spellmax2: HashMap<String, i64> = HashMap::new();
-    let mut spellmax3: HashMap<String, i64> = HashMap::new();
-    let mut spellmax4: HashMap<String, i64> = HashMap::new();
+    let item0: i64;
+    let item1: i64;
+    let item3: i64;
+    let item2: i64;
+    let item4: i64;
+    let item5: i64;
+    let item6: i64;
+    let rune: String;
+    let rune1: String;
+    let rune2: String;
+    let summoner1: String;
+    let summoner2: String;
+    let spellmax1: String;
+    let spellmax2: String;
+    let spellmax3: String;
+    let spellmax4: String;
     let mut spellpath1: String = "ZoeQ".to_string();
     let mut spellpath2: String = "ZoeE".to_string();
     let mut spellpath3: String = "ZoeW".to_string();
@@ -82,83 +249,50 @@ fn read_matches(
             true => wins += 1,
             false => loses += 1,
         };
-
-        item0.insert(
-            element.item0,
-            *(item0.get(&element.item0).get_or_insert(&0)) + 1,
-        );
-        item1.insert(
-            element.item1,
-            *(item1.get(&element.item1).get_or_insert(&0)) + 1,
-        );
-        item2.insert(
-            element.item2,
-            *(item2.get(&element.item2).get_or_insert(&0)) + 1,
-        );
-        item3.insert(
-            element.item3,
-            *(item3.get(&element.item3).get_or_insert(&0)) + 1,
-        );
-        item4.insert(
-            element.item4,
-            *(item4.get(&element.item4).get_or_insert(&0)) + 1,
-        );
-        item5.insert(
-            element.item5,
-            *(item5.get(&element.item5).get_or_insert(&0)) + 1,
-        );
-        item6.insert(
-            element.item6,
-            *(item6.get(&element.item6).get_or_insert(&0)) + 1,
-        );
-        rune.insert(
-            element.rune.clone(),
-            *(rune.get(&element.rune.clone()).get_or_insert(&0)) + 1,
-        );
-        rune1.insert(
-            element.rune1.clone(),
-            *(rune1.get(&element.rune1.clone()).get_or_insert(&0)) + 1,
-        );
-        rune2.insert(
-            element.rune2.clone(),
-            *(rune2.get(&element.rune2.clone()).get_or_insert(&0)) + 1,
-        );
-        summoner1.insert(
-            element.summoner1.clone(),
-            *(summoner1.get(&element.summoner1.clone()).get_or_insert(&0)) + 1,
-        );
-        summoner2.insert(
-            element.summoner2.clone(),
-            *(summoner2.get(&element.summoner2.clone()).get_or_insert(&0)) + 1,
-        );
-        spellmax1.insert(
-            element.spellmax1.clone(),
-            *(spellmax1.get(&element.spellmax1.clone()).get_or_insert(&0)) + 1,
-        );
-        spellmax2.insert(
-            element.spellmax2.clone(),
-            *(spellmax2.get(&element.spellmax2.clone()).get_or_insert(&0)) + 1,
-        );
-        spellmax3.insert(
-            element.spellmax3.clone(),
-            *(spellmax3.get(&element.spellmax3.clone()).get_or_insert(&0)) + 1,
-        );
-        spellmax4.insert(
-            element.spellmax4.clone(),
-            *(spellmax4.get(&element.spellmax4.clone()).get_or_insert(&0)) + 1,
-        );
     }
+
+    let mut tmp_matches = matches.clone();
+
+    item0 = get_highest(get_next_item(0, &role, &tmp_matches));
+    remove_item_not_present(0, item0, &role, &mut tmp_matches);
+    item1 = get_highest(get_next_item(1, &role, &tmp_matches));
+    remove_item_not_present(1, item1, &role, &mut tmp_matches);
+    item2 = get_highest(get_next_item(2, &role, &tmp_matches));
+    remove_item_not_present(2, item2, &role, &mut tmp_matches);
+    item3 = get_highest(get_next_item(3, &role, &tmp_matches));
+    remove_item_not_present(3, item3, &role, &mut tmp_matches);
+    item4 = get_highest(get_next_item(4, &role, &tmp_matches));
+    remove_item_not_present(4, item4, &role, &mut tmp_matches);
+    item5 = get_highest(get_next_item(5, &role, &tmp_matches));
+    remove_item_not_present(5, item5, &role, &mut tmp_matches);
+    item6 = get_highest(get_next_item(6, &role, &tmp_matches));
+
+    let mut tmp_matches = matches.clone();
+    rune = get_highest_str(get_next_rune(0, &role, &tmp_matches));
+    remove_rune_not_present(0, &rune, &role, &mut tmp_matches);
+    rune1 = get_highest_str(get_next_rune(1, &role, &tmp_matches));
+    remove_rune_not_present(1, &rune1, &role, &mut tmp_matches);
+    rune2 = get_highest_str(get_next_rune(2, &role, &tmp_matches));
+
+    let mut tmp_matches = matches.clone();
+    spellmax1 = get_highest_str(get_next_spell(0, &role, &tmp_matches));
+    remove_spell_not_present(0, &spellmax1, &role, &mut tmp_matches);
+    spellmax2 = get_highest_str(get_next_spell(1, &role, &tmp_matches));
+    remove_spell_not_present(1, &spellmax2, &role, &mut tmp_matches);
+    spellmax3 = get_highest_str(get_next_spell(2, &role, &tmp_matches));
+    remove_spell_not_present(2, &spellmax3, &role, &mut tmp_matches);
+    spellmax4 = get_highest_str(get_next_spell(3, &role, &tmp_matches));
+
+    let mut tmp_matches = matches.clone();
+    summoner1 = get_highest_str(get_next_summoner(0, &role, &tmp_matches));
+    tmp_matches.retain(|element| &element.role == &role && &element.summoner1 == &summoner1);
+    summoner2 = get_highest_str(get_next_summoner(1, &role, &tmp_matches));
 
     let tmp_title = get_champ_title(&champion_name);
 
     if tmp_title.is_ok() {
         title = tmp_title.unwrap();
     }
-
-    let spellmax1 = get_highest_str(spellmax1);
-    let spellmax2 = get_highest_str(spellmax2);
-    let spellmax3 = get_highest_str(spellmax3);
-    let spellmax4 = get_highest_str(spellmax4);
 
     let spell_icons = get_champ_spells(&champion_name);
 
@@ -184,19 +318,19 @@ fn read_matches(
         loses,
         name: champion_name,
         title,
-        item0: get_highest(item0),
-        item1: get_highest(item1),
-        item2: get_highest(item2),
-        item3: get_highest(item3),
-        item4: get_highest(item4),
-        item5: get_highest(item5),
-        item6: get_highest(item6),
+        item0,
+        item1,
+        item2,
+        item3,
+        item4,
+        item5,
+        item6,
         role,
-        rune: get_highest_str(rune),
-        rune1: get_highest_str(rune1),
-        rune2: get_highest_str(rune2),
-        summoner1: get_highest_str(summoner1),
-        summoner2: get_highest_str(summoner2),
+        rune,
+        rune1,
+        rune2,
+        summoner1,
+        summoner2,
         spellmax1,
         spellmax2,
         spellmax3,

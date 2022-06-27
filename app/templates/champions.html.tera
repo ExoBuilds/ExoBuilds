@@ -39,6 +39,7 @@
           {% else %}
             <h3 style="text-align:center;color:red">{{ winrate }}%</h3>
           {% endif %}
+            <h3 style="text-align:center;color:gray">({{ games }})</h3>
           
           </div>
           <div class="col-8" style="margin-top: 6rem;">
@@ -48,7 +49,7 @@
         <div class="row">
           <div class="col-1"></div>
           <div class="col-2" style="margin-top: 4rem;margin-left:1.4rem">
-            <img src="images/{{ role }}.png" alt="Jungle">
+            <img src="images/{{ role }}.png" alt="{{ role }}">
           </div>
           <div class="col-8" style="margin-top: 4rem;display:flex">
             <div>

@@ -62,6 +62,7 @@ fn champions(db: &State<Database>, name: &str) -> Template {
     let mut summoner2 = "Dot".into();
     let mut role = "JUNGLE".into();
     let mut winrate = 50;
+    let mut games = 2;
 
     if champion.is_ok() {
         let champion = champion.unwrap();
@@ -103,6 +104,7 @@ fn champions(db: &State<Database>, name: &str) -> Template {
         spellmax2 = champion.spellpath2;
         spellmax3 = champion.spellpath3;
         spellmax4 = champion.spellpath4;
+        games = champion.wins + champion.loses;
     }
 
     Template::render(
@@ -131,7 +133,8 @@ fn champions(db: &State<Database>, name: &str) -> Template {
             summoner1,
             summoner2,
             role,
-            winrate
+            winrate,
+            games,
         },
     )
 }
